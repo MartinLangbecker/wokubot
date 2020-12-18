@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'login_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(WokubotApp());
 }
 
-class MyApp extends StatelessWidget {
+class WokubotApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
