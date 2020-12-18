@@ -20,24 +20,30 @@ class MainScreen extends StatelessWidget {
       child: RichText(
         textAlign: TextAlign.justify,
         text: TextSpan(
-          text: 'This is a description of a user. This is for test purposes only and will not be needed in the future.',
+          text:
+              'This is just some random text to fill the space. This is for test purposes only and will not be needed in the future.',
           style: TextStyle(color: Colors.black, fontSize: 20),
         ),
       ),
     );
 
-    final buttonLogout = FlatButton(
-      onPressed: () {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-      child: Text(
-        'Logout',
-        style: TextStyle(color: Colors.black87, fontSize: 16),
-      ),
-    );
-
     return SafeArea(
         child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        drawer: Drawer(
+          child: Column(
+            children: <Widget>[
+              Padding(padding: EdgeInsets.only(top: 20)),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Logout'),
+                onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage())),
+              )
+            ],
+          ),
+        ),
       body: Center(
         child: ListView(
           shrinkWrap: true,
@@ -45,10 +51,10 @@ class MainScreen extends StatelessWidget {
           children: <Widget>[
             avatar,
             description,
-            buttonLogout,
           ],
         ),
       ),
-    ));
+      ),
+    );
   }
 }
