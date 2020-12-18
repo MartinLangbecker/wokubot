@@ -7,6 +7,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final addressController = TextEditingController();
+  String address = '';
+
+  void _handleLogin() {
+    setState(() {
+      address = addressController.text;
+    });
+    if (_validateAddress()) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen(title: 'Wokubot Home')));
+    } else {
+      // TODO display error message "Please enter a valid IP address"
+    }
+  }
+
+  bool _validateAddress() {
+    // TODO add validation
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final logo = Padding(
@@ -37,6 +56,10 @@ class _LoginPageState extends State<LoginPage> {
           contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
         ),
+        controller: addressController,
+        onSubmitted: (text) {
+          _handleLogin();
+        },
       ),
     );
 
@@ -49,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.black87,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+            _handleLogin();
           },
         ),
       ),

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'login_page.dart';
 
 class MainScreen extends StatelessWidget {
+  final String title;
+
+  const MainScreen({Key key, this.title}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final avatar = Padding(
@@ -28,7 +32,7 @@ class MainScreen extends StatelessWidget {
     );
 
     return SafeArea(
-        child: Scaffold(
+      child: Scaffold(
         appBar: AppBar(
           title: Text(title),
         ),
@@ -44,16 +48,16 @@ class MainScreen extends StatelessWidget {
             ],
           ),
         ),
-      body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          children: <Widget>[
-            avatar,
-            description,
-          ],
+        body: Center(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            children: <Widget>[
+              avatar,
+              description,
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
