@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'main_screen.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -47,7 +48,9 @@ class _LoginPageState extends State<LoginPage> {
           child: Text('Login', style: TextStyle(color: Colors.white, fontSize: 20)),
           color: Colors.black87,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          onPressed: () => {},
+          onPressed: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+          },
         ),
       ),
     );
