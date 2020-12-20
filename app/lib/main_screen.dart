@@ -14,7 +14,6 @@ class MainScreen extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             title: Text(title),
-            centerTitle: true,
             bottom: TabBar(
               tabs: [
                 Tab(
@@ -35,7 +34,7 @@ class MainScreen extends StatelessWidget {
           drawer: AppDrawer(),
           body: TabBarView(
             children: [
-              MediaList(),
+              MediaList(type: 'image'),
               Container(
                 child: Center(
                   child: Text('Audio coming soon!™'),
