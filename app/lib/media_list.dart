@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class MediaList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: 10,
+      separatorBuilder: (context, index) => Divider(),
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
           title: Text('Image $index'),
@@ -17,7 +18,7 @@ class MediaList extends StatelessWidget {
           ),
           onTap: () {
             final snackBar = SnackBar(
-              content: Text('Tapped on entry $index'),
+              content: Text('Display image $index'),
               duration: Duration(seconds: 2),
             );
             Scaffold.of(context).showSnackBar(snackBar);
