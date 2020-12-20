@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'main_screen.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState('Connect to Server');
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final String title;
   final _formKey = GlobalKey<FormState>();
-  final _addressController = TextEditingController(text: '192.168.0.1'); // TODO remove initial st?
+  final _addressController = TextEditingController(text: '192.168.0.1');
   final _addressValidator = MultiValidator([
     PatternValidator(
         r'\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\b',
@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   ]);
   String address = '';
 
+  _LoginPageState(this.title);
   void _handleLogin() {
     if (!_formKey.currentState.validate()) {
       return;
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       address = _addressController.text;
     });
     if (_connectToServer()) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen(title: 'Wokubot Home')));
+      Navigator.pop(context);
     } else {
       // TODO display error message "Error connecting to server"
     }
@@ -46,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
         tag: 'hero',
         child: SizedBox(
           height: 160,
-          child: Image.asset('../samples/images/wokubot_main.jpg'),
+          child: Image.asset('images/wokubot_main.jpg'),
         ),
       ),
     );
@@ -95,15 +96,16 @@ class _LoginPageState extends State<LoginPage> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
         body: Center(
           child: Form(
             key: _formKey,
             child: ListView(
               shrinkWrap: true,
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              children: <Widget>[
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              children: [
                 logo,
                 description,
                 inputAddress,

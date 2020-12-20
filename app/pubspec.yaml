@@ -43,8 +43,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - ../samples/images/wokubot_main.jpg
-    - ../samples/images/wokubot_hearts.png
+    - images/wokubot_main.jpg
+    - images/wokubot_hearts.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
