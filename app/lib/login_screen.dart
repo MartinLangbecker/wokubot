@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState('Connect to Server');
+  _LoginScreenState createState() => _LoginScreenState('Connect to Server');
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   final String title;
   final _formKey = GlobalKey<FormState>();
   final _addressController = TextEditingController(text: '192.168.0.1');
@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   ]);
   String address = '';
 
-  _LoginPageState(this.title);
+  _LoginScreenState(this.title);
   void _handleLogin() {
     if (!_formKey.currentState.validate()) {
       return;
