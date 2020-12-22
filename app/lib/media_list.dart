@@ -1,4 +1,4 @@
-import 'package:app/app_drawer.dart';
+import 'package:wokubot/app_drawer.dart';
 import 'package:flutter/material.dart';
 
 class MediaList extends StatefulWidget {

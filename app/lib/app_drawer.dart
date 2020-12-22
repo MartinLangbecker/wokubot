@@ -1,5 +1,5 @@
-import 'package:app/login_screen.dart';
-import 'package:app/settings_screen.dart';
+import 'package:wokubot/login_screen.dart';
+import 'package:wokubot/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {

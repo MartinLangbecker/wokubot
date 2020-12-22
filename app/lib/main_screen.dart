@@ -1,5 +1,5 @@
-import 'package:app/media_list.dart';
-import 'package:app/recording_screen.dart';
+import 'package:wokubot/media_list.dart';
+import 'package:wokubot/recording_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {

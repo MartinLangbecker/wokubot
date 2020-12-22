@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:app/main_screen.dart';
+import 'package:wokubot/main_screen.dart';
 
 void main() {
   runApp(WokubotApp());
