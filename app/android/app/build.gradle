@@ -43,7 +43,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "de.kuko.woku"
+        applicationId "de.kuko.woziku"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
