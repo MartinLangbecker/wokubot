@@ -13,7 +13,7 @@ class WokubotApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainScreen(title: 'Wokubot App'),
+      home: MainScreen(),
     );
   }
 }

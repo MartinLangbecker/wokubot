@@ -1,54 +1,48 @@
-import 'package:app/app_drawer.dart';
 import 'package:app/media_list.dart';
+import 'package:app/recording_screen.dart';
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatelessWidget {
-  final String title;
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
 
-  const MainScreen({Key key, this.title}) : super(key: key);
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: DefaultTabController(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(title),
-            bottom: TabBar(
-              tabs: [
-                Tab(
-                  text: 'Images',
-                  icon: Icon(Icons.image),
-                ),
-                Tab(
-                  text: 'Audio',
-                  icon: Icon(Icons.audiotrack),
-                ),
-                Tab(
-                  text: 'Video',
-                  icon: Icon(Icons.local_movies),
-                )
-              ],
+      child: Scaffold(
+        body: [
+          MediaList(),
+          RecordingScreen(),
+        ].elementAt(_selectedIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.grey[300],
+          currentIndex: _selectedIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.play_arrow,
+                color: Colors.green,
+              ),
+              label: 'Play',
             ),
-          ),
-          drawer: AppDrawer(),
-          body: TabBarView(
-            children: [
-              MediaList(type: 'image'),
-              Container(
-                child: Center(
-                  child: Text('Audio coming soon!™'),
-                ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.circle,
+                color: Colors.red,
               ),
-              Container(
-                child: Center(
-                  child: Text('Video coming soon!™'),
-                ),
-              ),
-            ],
-          ),
+              label: 'Record',
+            ),
+          ],
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
         ),
-        length: 3,
       ),
     );
   }

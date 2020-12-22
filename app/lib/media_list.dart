@@ -1,3 +1,4 @@
+import 'package:app/app_drawer.dart';
 import 'package:flutter/material.dart';
 
 class MediaList extends StatefulWidget {
@@ -55,32 +56,73 @@ class _MediaListState extends State<MediaList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: entries.length,
-      separatorBuilder: (context, index) => Divider(),
-      itemBuilder: (BuildContext context, int index) {
-        var entry = entries[index];
-        return ListTile(
-          title: Text(entry['title']),
-          subtitle: Text(
-            entry['subtitle'],
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+    return SafeArea(
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Media List'),
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                  text: 'Images',
+                  icon: Icon(Icons.image),
+                ),
+                Tab(
+                  text: 'Audio',
+                  icon: Icon(Icons.audiotrack),
+                ),
+                Tab(
+                  text: 'Video',
+                  icon: Icon(Icons.local_movies),
+                )
+              ],
+            ),
           ),
-          isThreeLine: true,
-          leading: SizedBox(
-            height: 120,
-            child: Image.asset(entry['image']),
+          drawer: AppDrawer(),
+          body: TabBarView(
+            children: [
+              ListView.separated(
+                itemCount: entries.length,
+                separatorBuilder: (context, index) => Divider(),
+                itemBuilder: (BuildContext context, int index) {
+                  var entry = entries[index];
+                  return ListTile(
+                    title: Text(entry['title']),
+                    subtitle: Text(
+                      entry['subtitle'],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    isThreeLine: true,
+                    leading: SizedBox(
+                      height: 120,
+                      child: Image.asset(entry['image']),
+                    ),
+                    onTap: () {
+                      final snackBar = SnackBar(
+                        content: Text('Display ${entry["title"]}'),
+                        duration: Duration(seconds: 2),
+                      );
+                      Scaffold.of(context).showSnackBar(snackBar);
+                    },
+                  );
+                },
+              ),
+              Container(
+                child: Center(
+                  child: Text('Audio coming soon!™'),
+                ),
+              ),
+              Container(
+                child: Center(
+                  child: Text('Video coming soon!™'),
+                ),
+              ),
+            ],
           ),
-          onTap: () {
-            final snackBar = SnackBar(
-              content: Text('Display ${entry["title"]}'),
-              duration: Duration(seconds: 2),
-            );
-            Scaffold.of(context).showSnackBar(snackBar);
-          },
-        );
-      },
+        ),
+      ),
     );
   }
 }
