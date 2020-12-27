@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LogoutScreen extends StatefulWidget {
+class LogoutScreen extends StatelessWidget {
   final VoidCallback toggleConnectionState;
 
   const LogoutScreen({Key key, this.toggleConnectionState}) : super(key: key);
 
-  @override
-  _LogoutScreenState createState() => _LogoutScreenState();
-}
-
-class _LogoutScreenState extends State<LogoutScreen> {
-  void _handleDisconnect() {
+  void _handleDisconnect(BuildContext context) {
     if (_disconnectFromServer()) {
-      widget.toggleConnectionState();
+      toggleConnectionState();
       Navigator.pop(context);
     }
   }
@@ -73,7 +68,7 @@ class _LogoutScreenState extends State<LogoutScreen> {
                         borderRadius: BorderRadius.circular(50),
                       ),
                       onPressed: () {
-                        _handleDisconnect();
+                        _handleDisconnect(context);
                       },
                     ),
                   ),
