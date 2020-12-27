@@ -15,42 +15,42 @@ class _MediaListState extends State<MediaList> {
     {
       'title': 'First image',
       'subtitle': 'First, Let\'s start off with something simple.',
-      'image': 'images/wokubot_main.jpg',
+      'image': 'assets/images/wokubot_main.jpg',
     },
     {
       'title': 'Second image',
       'subtitle': 'Use this for some deep emotions.',
-      'image': 'images/wokubot_hearts.png',
+      'image': 'assets/images/wokubot_hearts.png',
     },
     {
       'title': 'Third image',
       'subtitle': 'Hey, didn\'t we already use this one?',
-      'image': 'images/wokubot_main.jpg',
+      'image': 'assets/images/wokubot_main.jpg',
     },
     {
       'title': 'Fourth image',
       'subtitle': 'Oh well, never mind. I forgot that this is just a test.',
-      'image': 'images/wokubot_hearts.png',
+      'image': 'assets/images/wokubot_hearts.png',
     },
     {
       'title': 'Fifth image',
       'subtitle': 'Here, have some more!',
-      'image': 'images/wokubot_main.jpg',
+      'image': 'assets/images/wokubot_main.jpg',
     },
     {
       'title': 'Sixth image',
       'subtitle': 'How about a subtitle with more text? Maybe I could tell you about this one time at band camp ...',
-      'image': 'images/wokubot_hearts.png',
+      'image': 'assets/images/wokubot_hearts.png',
     },
     {
       'title': 'Seventh image',
       'subtitle': 'Wow, you chose some *really* creative titles!\n\nThat was sarcastic, by the way.',
-      'image': 'images/wokubot_main.jpg',
+      'image': 'assets/images/wokubot_main.jpg',
     },
     {
       'title': 'Image 8',
       'subtitle': '... you bastard!',
-      'image': 'images/wokubot_hearts.png',
+      'image': 'assets/images/wokubot_hearts.png',
     },
   ];
 

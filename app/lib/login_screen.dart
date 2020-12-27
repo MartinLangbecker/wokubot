@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
         tag: 'hero',
         child: SizedBox(
           height: 160,
-          child: Image.asset('images/wokubot_main.jpg'),
+          child: Image.asset('assets/images/wokubot_main.jpg'),
         ),
       ),
     );
