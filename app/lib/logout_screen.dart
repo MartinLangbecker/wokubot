@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 
-class LogoutScreen extends StatelessWidget {
+class LogoutScreen extends StatefulWidget {
+  final VoidCallback toggleConnectionState;
+
+  const LogoutScreen({Key key, this.toggleConnectionState}) : super(key: key);
+
+  @override
+  _LogoutScreenState createState() => _LogoutScreenState();
+}
+
+class _LogoutScreenState extends State<LogoutScreen> {
+  void _handleDisconnect() {
+    if (_disconnectFromServer()) {
+      widget.toggleConnectionState();
+      Navigator.pop(context);
+    }
+  }
+
+  bool _disconnectFromServer() {
+    // TODO implement
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -51,7 +72,9 @@ class LogoutScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _handleDisconnect();
+                      },
                     ),
                   ),
                 ),

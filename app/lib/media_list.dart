@@ -2,9 +2,11 @@ import 'package:wokubot/app_drawer.dart';
 import 'package:flutter/material.dart';
 
 class MediaList extends StatefulWidget {
+  final bool isConnected;
+  final VoidCallback toggleConnectionState;
   final String type;
 
-  MediaList({Key key, this.type = 'audio'}) : super(key: key);
+  MediaList({Key key, this.type = 'audio', this.isConnected, this.toggleConnectionState}) : super(key: key);
 
   @override
   _MediaListState createState() => _MediaListState();
@@ -79,7 +81,10 @@ class _MediaListState extends State<MediaList> {
               ],
             ),
           ),
-          drawer: AppDrawer(),
+          drawer: AppDrawer(
+            isConnected: widget.isConnected,
+            toggleConnectionState: widget.toggleConnectionState,
+          ),
           body: TabBarView(
             children: [
               ListView.separated(

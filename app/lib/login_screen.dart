@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 class LoginScreen extends StatefulWidget {
+  final VoidCallback toggleConnectionState;
+
+  const LoginScreen({Key key, this.toggleConnectionState}) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -17,8 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   ]);
   String address = '';
 
-  _LoginScreenState();
-  void _handleLogin() {
+  void _handleConnect() {
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -27,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
       address = _addressController.text;
     });
     if (_connectToServer()) {
+      widget.toggleConnectionState();
       Navigator.pop(context);
     } else {
       // TODO display error message "Error connecting to server"
@@ -85,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     keyboardType: TextInputType.number,
-                    onFieldSubmitted: (_) => _handleLogin(),
+                    onFieldSubmitted: (_) => _handleConnect(),
                     onSaved: (text) => address = text,
                     textAlign: TextAlign.center,
                     validator: _addressValidator,
@@ -107,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      onPressed: () => _handleLogin(),
+                      onPressed: () => _handleConnect(),
                     ),
                   ),
                 ),

@@ -8,15 +8,28 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  bool _isConnected = false;
   int _selectedIndex = 0;
+
+  void _toggleConnectionState() {
+    setState(() {
+      _isConnected = !_isConnected;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: [
-          MediaList(),
-          RecordingScreen(),
+          MediaList(
+            isConnected: _isConnected,
+            toggleConnectionState: () => _toggleConnectionState(),
+          ),
+          RecordingScreen(
+            isConnected: _isConnected,
+            toggleConnectionState: () => _toggleConnectionState(),
+          ),
         ].elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.grey[300],
