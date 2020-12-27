@@ -21,9 +21,7 @@ class _AppDrawerState extends State<AppDrawer> {
         children: [
           Padding(padding: EdgeInsets.only(top: 20)),
           (widget.isConnected)
-              ?
-              // TODO: get state from main screen and only display either connect or disconnect option
-              ListTile(
+              ? ListTile(
                   leading: Icon(Icons.login),
                   title: Text('Connect'),
                   onTap: () {
