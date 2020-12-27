@@ -99,13 +99,19 @@ class _MediaListState extends State<MediaList> {
                       height: 120,
                       child: Image.asset(entry['image']),
                     ),
-                    onTap: () {
-                      final snackBar = SnackBar(
-                        content: Text('Display ${entry["title"]}'),
-                        duration: Duration(seconds: 2),
-                      );
-                      Scaffold.of(context).showSnackBar(snackBar);
-                    },
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.play_circle_filled,
+                        color: Colors.green,
+                      ),
+                      onPressed: () {
+                        final snackBar = SnackBar(
+                          content: Text('Preview ${entry["title"]}'),
+                          duration: Duration(seconds: 2),
+                        );
+                        Scaffold.of(context).showSnackBar(snackBar);
+                      },
+                    ),
                   );
                 },
               ),
