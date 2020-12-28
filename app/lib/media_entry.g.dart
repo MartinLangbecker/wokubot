@@ -12,10 +12,13 @@ MediaEntry _$MediaEntryFromJson(Map<String, dynamic> json) {
     json['name'] as String,
     json['description'] as String,
     json['file'] as String,
+    json['id'] as int,
   );
 }
 
-Map<String, dynamic> _$MediaEntryToJson(MediaEntry instance) => <String, dynamic>{
+Map<String, dynamic> _$MediaEntryToJson(MediaEntry instance) =>
+    <String, dynamic>{
+      'id': instance.id,
       'type': instance.type,
       'name': instance.name,
       'description': instance.description,
