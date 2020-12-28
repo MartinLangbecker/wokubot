@@ -1,0 +1,50 @@
+[
+    {
+        "type": "image",
+        "name": "First image",
+        "description": "First, Let\"s start off with something simple.",
+        "file": "assets/images/wokubot_main.jpg"
+    },
+    {
+        "type": "image",
+        "name": "Second image",
+        "description": "Use this for some deep emotions.",
+        "file": "assets/images/wokubot_hearts.png"
+    },
+    {
+        "type": "image",
+        "name": "Third image",
+        "description": "Hey, didn\"t we already use this one?",
+        "file": "assets/images/wokubot_main.jpg"
+    },
+    {
+        "type": "image",
+        "name": "Fourth image",
+        "description": "Oh well, never mind. I forgot that this is just a test.",
+        "file": "assets/images/wokubot_hearts.png"
+    },
+    {
+        "type": "image",
+        "name": "Fifth image",
+        "description": "Here, have some more!",
+        "file": "assets/images/wokubot_main.jpg"
+    },
+    {
+        "type": "image",
+        "name": "Sixth image",
+        "description": "How about a subtitle with more text? Maybe I could tell you about this one time at band camp ...",
+        "file": "assets/images/wokubot_hearts.png"
+    },
+    {
+        "type": "image",
+        "name": "Seventh image",
+        "description": "Wow, you chose some *really* creative titles!\n\nThat was sarcastic, by the way.",
+        "file": "assets/images/wokubot_main.jpg"
+    },
+    {
+        "type": "image",
+        "name": "Image 8",
+        "description": "... you bastard!",
+        "file": "assets/images/wokubot_hearts.png"
+    }
+]

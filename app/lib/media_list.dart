@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:wokubot/app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:wokubot/media_entry.dart';
 
 class MediaList extends StatefulWidget {
   final bool isConnected;
@@ -13,48 +17,22 @@ class MediaList extends StatefulWidget {
 }
 
 class _MediaListState extends State<MediaList> {
-  var entries = const [
-    {
-      'title': 'First image',
-      'subtitle': 'First, Let\'s start off with something simple.',
-      'image': 'assets/images/wokubot_main.jpg',
-    },
-    {
-      'title': 'Second image',
-      'subtitle': 'Use this for some deep emotions.',
-      'image': 'assets/images/wokubot_hearts.png',
-    },
-    {
-      'title': 'Third image',
-      'subtitle': 'Hey, didn\'t we already use this one?',
-      'image': 'assets/images/wokubot_main.jpg',
-    },
-    {
-      'title': 'Fourth image',
-      'subtitle': 'Oh well, never mind. I forgot that this is just a test.',
-      'image': 'assets/images/wokubot_hearts.png',
-    },
-    {
-      'title': 'Fifth image',
-      'subtitle': 'Here, have some more!',
-      'image': 'assets/images/wokubot_main.jpg',
-    },
-    {
-      'title': 'Sixth image',
-      'subtitle': 'How about a subtitle with more text? Maybe I could tell you about this one time at band camp ...',
-      'image': 'assets/images/wokubot_hearts.png',
-    },
-    {
-      'title': 'Seventh image',
-      'subtitle': 'Wow, you chose some *really* creative titles!\n\nThat was sarcastic, by the way.',
-      'image': 'assets/images/wokubot_main.jpg',
-    },
-    {
-      'title': 'Image 8',
-      'subtitle': '... you bastard!',
-      'image': 'assets/images/wokubot_hearts.png',
-    },
-  ];
+  List<MediaEntry> entries = const [];
+
+  Future loadMediaList() async {
+    String content = await rootBundle.loadString('data/media_entries.json');
+    List collection = json.decode(content);
+    List<MediaEntry> _entries = collection.map((json) => MediaEntry.fromJson(json)).toList();
+
+    setState(() {
+      entries = _entries;
+    });
+  }
+
+  void initState() {
+    loadMediaList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,18 +69,18 @@ class _MediaListState extends State<MediaList> {
                 itemCount: entries.length,
                 separatorBuilder: (context, index) => Divider(),
                 itemBuilder: (BuildContext context, int index) {
-                  var entry = entries[index];
+                  MediaEntry entry = entries[index];
                   return ListTile(
-                    title: Text(entry['title']),
+                    title: Text(entry.name),
                     subtitle: Text(
-                      entry['subtitle'],
+                      entry.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     isThreeLine: true,
                     leading: SizedBox(
                       height: 120,
-                      child: Image.asset(entry['image']),
+                      child: Image.asset(entry.file),
                     ),
                     trailing: IconButton(
                       icon: Icon(
@@ -111,7 +89,7 @@ class _MediaListState extends State<MediaList> {
                       ),
                       onPressed: () {
                         final snackBar = SnackBar(
-                          content: Text('Preview ${entry["title"]}'),
+                          content: Text('Preview ${entry.name}'),
                           duration: Duration(seconds: 2),
                         );
                         Scaffold.of(context).showSnackBar(snackBar);
