@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:wokubot/app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:wokubot/media_details_screen.dart';
 import 'package:wokubot/media_entry.dart';
 
 class MediaList extends StatefulWidget {
@@ -71,6 +72,10 @@ class _MediaListState extends State<MediaList> {
                 itemBuilder: (BuildContext context, int index) {
                   MediaEntry entry = entries[index];
                   return ListTile(
+                    leading: SizedBox(
+                      height: 120,
+                      child: Image.asset(entry.file),
+                    ),
                     title: Text(entry.name),
                     subtitle: Text(
                       entry.description,
@@ -78,21 +83,20 @@ class _MediaListState extends State<MediaList> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     isThreeLine: true,
-                    leading: SizedBox(
-                      height: 120,
-                      child: Image.asset(entry.file),
-                    ),
+                    onTap: () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MediaDetailsScreen(entry))),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.play_circle_filled,
                         color: Colors.green,
                       ),
                       onPressed: () {
-                        final snackBar = SnackBar(
-                          content: Text('Preview ${entry.name}'),
-                          duration: Duration(seconds: 2),
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Preview ${entry.name}'),
+                            duration: Duration(seconds: 2),
+                          ),
                         );
-                        Scaffold.of(context).showSnackBar(snackBar);
                       },
                     ),
                   );
