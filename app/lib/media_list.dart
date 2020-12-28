@@ -90,6 +90,7 @@ class _MediaListState extends State<MediaList> {
                       icon: Icon(
                         Icons.play_circle_filled,
                         color: Colors.green,
+                        size: 50,
                       ),
                       onPressed: () {
                         Scaffold.of(context).showSnackBar(
