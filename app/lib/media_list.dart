@@ -93,7 +93,9 @@ class _MediaListState extends State<MediaList> {
                       onPressed: () {
                         Scaffold.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Preview ${entry.name}'),
+                            content: (widget.isConnected)
+                                ? Text('Show ${entry.name} on server')
+                                : Text('Preview ${entry.name} locally'),
                             duration: Duration(seconds: 2),
                           ),
                         );

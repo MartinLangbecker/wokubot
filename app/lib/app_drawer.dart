@@ -20,7 +20,7 @@ class _AppDrawerState extends State<AppDrawer> {
       child: Column(
         children: [
           Padding(padding: EdgeInsets.only(top: 20)),
-          (widget.isConnected)
+          (!widget.isConnected)
               ? ListTile(
                   leading: Icon(Icons.login),
                   title: Text('Connect'),
