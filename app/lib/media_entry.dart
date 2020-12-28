@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'media_entry.g.dart';
+
+@JsonSerializable()
 class MediaEntry {
   final String type;
   final String name;
@@ -6,9 +11,5 @@ class MediaEntry {
 
   MediaEntry(this.type, this.name, this.description, this.file);
 
-  MediaEntry.fromJson(Map<String, dynamic> json)
-      : type = json['type'],
-        name = json['name'],
-        description = json['description'],
-        file = json['file'];
+  factory MediaEntry.fromJson(Map<String, dynamic> json) => _$MediaEntryFromJson(json);
 }
