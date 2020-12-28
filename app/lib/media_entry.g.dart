@@ -15,7 +15,6 @@ MediaEntry _$MediaEntryFromJson(Map<String, dynamic> json) {
   );
 }
 
-// ignore: unused_element
 Map<String, dynamic> _$MediaEntryToJson(MediaEntry instance) => <String, dynamic>{
       'type': instance.type,
       'name': instance.name,

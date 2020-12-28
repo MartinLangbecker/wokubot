@@ -12,4 +12,6 @@ class MediaEntry {
   MediaEntry(this.type, this.name, this.description, this.file);
 
   factory MediaEntry.fromJson(Map<String, dynamic> json) => _$MediaEntryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MediaEntryToJson(this);
 }
