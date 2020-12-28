@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:wokubot/media_list.dart';
 import 'package:wokubot/recording_screen.dart';
-import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -8,28 +8,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool _isConnected = false;
   int _selectedIndex = 0;
-
-  void _toggleConnectionState() {
-    setState(() {
-      _isConnected = !_isConnected;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: [
-          MediaList(
-            isConnected: _isConnected,
-            toggleConnectionState: () => _toggleConnectionState(),
-          ),
-          RecordingScreen(
-            isConnected: _isConnected,
-            toggleConnectionState: () => _toggleConnectionState(),
-          ),
+          MediaList(),
+          RecordingScreen(),
         ].elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.grey[300],

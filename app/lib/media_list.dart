@@ -1,17 +1,17 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:wokubot/app_drawer.dart';
-import 'package:flutter/material.dart';
+import 'package:wokubot/connection_model.dart';
 import 'package:wokubot/media_details_screen.dart';
 import 'package:wokubot/media_entry.dart';
 
 class MediaList extends StatefulWidget {
-  final bool isConnected;
-  final VoidCallback toggleConnectionState;
   final String type;
 
-  MediaList({Key key, this.type = 'audio', this.isConnected, this.toggleConnectionState}) : super(key: key);
+  MediaList({Key key, this.type = 'audio'}) : super(key: key);
 
   @override
   _MediaListState createState() => _MediaListState();
@@ -60,10 +60,7 @@ class _MediaListState extends State<MediaList> {
               ],
             ),
           ),
-          drawer: AppDrawer(
-            isConnected: widget.isConnected,
-            toggleConnectionState: widget.toggleConnectionState,
-          ),
+          drawer: AppDrawer(),
           body: TabBarView(
             children: [
               ListView.separated(
@@ -83,8 +80,12 @@ class _MediaListState extends State<MediaList> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     isThreeLine: true,
-                    onTap: () =>
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MediaDetailsScreen(entry))),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MediaDetailsScreen(entry),
+                      ),
+                    ),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.play_circle_filled,
@@ -93,9 +94,9 @@ class _MediaListState extends State<MediaList> {
                       onPressed: () {
                         Scaffold.of(context).showSnackBar(
                           SnackBar(
-                            content: (widget.isConnected)
-                                ? Text('Show ${entry.name} on server')
-                                : Text('Preview ${entry.name} locally'),
+                            content: (context.read<ConnectionModel>().isConnected)
+                                ? Text('Showing ${entry.name} on server ...')
+                                : Text('Preview ${entry.name} locally ...'),
                             duration: Duration(seconds: 2),
                           ),
                         );

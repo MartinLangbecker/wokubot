@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
+import 'package:wokubot/connection_model.dart';
 
 class LoginScreen extends StatefulWidget {
-  final VoidCallback toggleConnectionState;
-
-  const LoginScreen({Key key, this.toggleConnectionState}) : super(key: key);
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -30,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       address = _addressController.text;
     });
     if (_connectToServer()) {
-      widget.toggleConnectionState();
+      context.read<ConnectionModel>().setConnectionState(true);
       Navigator.pop(context);
     } else {
       // TODO display error message "Error connecting to server"

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wokubot/connection_model.dart';
 
 class LogoutScreen extends StatelessWidget {
-  final VoidCallback toggleConnectionState;
-
-  const LogoutScreen({Key key, this.toggleConnectionState}) : super(key: key);
-
   void _handleDisconnect(BuildContext context) {
     if (_disconnectFromServer()) {
-      toggleConnectionState();
+      context.read<ConnectionModel>().setConnectionState(false);
       Navigator.pop(context);
     }
   }
@@ -67,9 +65,7 @@ class LogoutScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      onPressed: () {
-                        _handleDisconnect(context);
-                      },
+                      onPressed: () => _handleDisconnect(context),
                     ),
                   ),
                 ),
