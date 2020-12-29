@@ -3,18 +3,33 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:wokubot/media_entry.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+class DatabaseAdapter {
+  static final _databaseName = "media.db";
+  static final _databaseVersion = 1; // increment on schema change
 
-  final Future<Database> database = openDatabase(
-    join(await getDatabasesPath(), 'media.db'),
-    onCreate: (db, version) {
-      return db.execute(
-        "CREATE TABLE media(id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, name TEXT, description TEXT, file TEXT)",
-      );
-    },
-    version: 1,
-  );
+  DatabaseAdapter._privateConstructor();
+  static final DatabaseAdapter instance = DatabaseAdapter._privateConstructor();
+
+  static Database _database;
+  Future<Database> get database async {
+    if (_database != null) return _database;
+    _database = await _initDatabase();
+    return _database;
+  }
+
+  Future<Database> _initDatabase() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    return await openDatabase(
+      join(await getDatabasesPath(), _databaseName),
+      onCreate: (db, version) {
+        return db.execute(
+          "CREATE TABLE media(id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, name TEXT, description TEXT, file TEXT)",
+        );
+      },
+      version: _databaseVersion,
+    );
+  }
 
   // TODO: remove hint once method is used
   // ignore: unused_element
