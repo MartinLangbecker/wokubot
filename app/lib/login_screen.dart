@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   ]);
   String address = '';
 
-  void _handleConnect() {
+  void _handleConnect(BuildContext context) {
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -31,7 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
       context.read<ConnectionModel>().setConnectionState(true);
       Navigator.pop(context);
     } else {
-      // TODO display error message "Error connecting to server"
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text('Error connecting to server'),
+          duration: Duration(seconds: 2),
+        ));
     }
   }
 
@@ -83,40 +88,43 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10),
-                  child: TextFormField(
-                    controller: _addressController,
-                    decoration: InputDecoration(
-                      hintText: 'Server IP (e. g. 192.168.0.1)',
-                      // contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50),
+                  child: Builder(builder: (BuildContext context) {
+                    return TextFormField(
+                      controller: _addressController,
+                      decoration: InputDecoration(
+                        hintText: 'Server IP (e. g. 192.168.0.1)',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                       ),
-                    ),
-                    keyboardType: TextInputType.number,
-                    onFieldSubmitted: (_) => _handleConnect(),
-                    onSaved: (text) => address = text,
-                    textAlign: TextAlign.center,
-                    validator: _addressValidator,
-                  ),
+                      keyboardType: TextInputType.number,
+                      onFieldSubmitted: (_) => _handleConnect(context),
+                      onSaved: (text) => address = text,
+                      textAlign: TextAlign.center,
+                      validator: _addressValidator,
+                    );
+                  }),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 5),
                   child: ButtonTheme(
                     height: 56,
-                    child: RaisedButton(
-                      child: Text(
-                        'Connect',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
+                    child: Builder(builder: (BuildContext context) {
+                      return RaisedButton(
+                        child: Text(
+                          'Connect',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
-                      color: Colors.black87,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      onPressed: () => _handleConnect(),
-                    ),
+                        color: Colors.black87,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        onPressed: () => _handleConnect(context),
+                      );
+                    }),
                   ),
                 ),
               ],
