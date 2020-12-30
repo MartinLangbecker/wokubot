@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wokubot/app_drawer.dart';
@@ -58,17 +60,17 @@ class _MediaListState extends State<MediaList> {
 
   List<MediaEntry> _getList(entry) {
     switch (entry.type) {
-      case 'image':
+      case MediaType.IMAGE:
         {
           return _images;
         }
         break;
-      case 'audio':
+      case MediaType.AUDIO:
         {
           return _audio;
         }
         break;
-      case 'video':
+      case MediaType.VIDEO:
         {
           return _video;
         }
@@ -201,7 +203,7 @@ class _MediaListState extends State<MediaList> {
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
-                      child: (entry.file != null) ? Image.asset(entry.file) : null,
+                      child: (entry.file != null) ? Image.file(File(entry.file)) : null,
                     ),
                     title: Text(entry.name),
                     subtitle: Text(
@@ -241,7 +243,7 @@ class _MediaListState extends State<MediaList> {
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
-                      child: Image.asset(entry.file),
+                      child: Image.file(File(entry.file)),
                     ),
                     title: Text(entry.name),
                     subtitle: Text(
@@ -286,7 +288,7 @@ class _MediaListState extends State<MediaList> {
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
-                      child: Image.asset(entry.file),
+                      child: Image.file(File(entry.file)),
                     ),
                     title: Text(entry.name),
                     subtitle: Text(

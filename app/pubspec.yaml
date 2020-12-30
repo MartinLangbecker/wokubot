@@ -15,6 +15,7 @@ dependencies:
   provider: ^4.0.1
   sqflite:
   path:
+  path_provider:
   image_picker:
 
 dev_dependencies:

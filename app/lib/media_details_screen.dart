@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_entry.dart';
 
@@ -48,7 +53,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     );
   }
 
-  Future<bool> _onBackPressed() {
+  Future<bool> _onBackPressed(BuildContext context) {
     // TODO don't show dialogue if no changes were made
     // TODO if changes were made, ask if user wants to save (Yes/No/Discard)
     return (!_isLocked)
@@ -60,7 +65,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
         : Future<bool>.value(true);
   }
 
-  Future<bool> _onDeletePressed() {
+  Future<bool> _onDeletePressed(BuildContext context) {
     return _showYesNoDialog(
       context: context,
       title: 'Delete entry?',
@@ -68,17 +73,29 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     );
   }
 
-  void _saveEntry(BuildContext context) {
+  void _saveEntry(BuildContext context) async {
     if (!_formKey.currentState.validate()) {
       return;
+    }
+    _formKey.currentState.save();
+
+    // TODO create fallback image in case no media file was selected
+    final String path = await getApplicationDocumentsDirectory().then((directory) => directory.path);
+    final String basename = p.basename(entry.file);
+
+    File file;
+    // TODO improve caching (?)
+    if (!File('$path/$basename').existsSync()) {
+      file = await File(entry.file).copy('$path/$basename');
+    } else {
+      file = File('$path/$basename');
     }
 
     setState(() {
       entry.name = _nameController.text;
       entry.description = _descriptionController.text;
-      // TODO change once actual media can be added
-      entry.type = 'image';
-      entry.file = 'assets/images/wokubot_main.jpg';
+      entry.file = file.path;
+      entry.type = _detectFileType(file);
     });
 
     if (_newEntry) {
@@ -105,8 +122,46 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
   }
 
+  // TODO extract to utils class
+  MediaType _detectFileType(File file) {
+    final String extension = p.extension(file.path).toLowerCase();
+    switch (extension) {
+      case '.bmp':
+      case '.gif':
+      case '.heic':
+      case '.heif':
+      case '.jpg':
+      case '.jpeg':
+      case '.png':
+      case '.webp':
+        {
+          return MediaType.IMAGE;
+        }
+      case '.3gp':
+      case '.aac':
+      case '.amr':
+      case '.flac':
+      case '.m4a':
+      case '.mp3':
+      case '.ogg':
+      case '.ts':
+      case '.wav':
+        {
+          return MediaType.AUDIO;
+        }
+      case '.mkv':
+      case '.mp4':
+      case '.webm':
+        {
+          return MediaType.VIDEO;
+        }
+      default:
+        throw new ErrorDescription('File type $extension is not supported');
+    }
+  }
+
   void _deleteEntry(BuildContext context) {
-    _onDeletePressed().then((deletionConfirmed) {
+    _onDeletePressed(context).then((deletionConfirmed) {
       if (deletionConfirmed) {
         DatabaseAdapter.instance.deleteMedia(entry.id);
         setState(() {
@@ -126,6 +181,20 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     });
   }
 
+  void _selectImage() async {
+    PickedFile pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1920,
+      maxHeight: 1080,
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        entry.file = pickedFile.path;
+      });
+    }
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -136,7 +205,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onBackPressed().then((willPop) {
+      onWillPop: () => _onBackPressed(context).then((willPop) {
         if (willPop) {
           Navigator.pop(context, entry);
         }
@@ -170,64 +239,75 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
               }),
             ],
           ),
-          body: Center(
-            child: Form(
-              key: _formKey,
-              child: ListView(
-                shrinkWrap: true,
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10),
+          body: Form(
+            key: _formKey,
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                  child: GestureDetector(
                     child: Hero(
                       tag: 'hero',
                       child: SizedBox(
-                        height: 200,
+                        height: 300,
                         child: (entry.file != null)
-                            ? Image.asset(entry.file)
+                            ? Image.file(File(entry.file))
                             : Icon(
                                 Icons.add,
                                 size: 64,
                               ),
                       ),
                     ),
+                    onTap: (_isLocked) ? null : () => _selectImage(),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10),
-                    child: TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Name',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      hintText: 'Name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(0),
                       ),
-                      textAlign: TextAlign.left,
-                      textInputAction: TextInputAction.next,
-                      style: TextStyle(color: Colors.black87, fontSize: 20),
-                      enabled: !_isLocked,
                     ),
+                    textAlign: TextAlign.left,
+                    textInputAction: TextInputAction.next,
+                    style: TextStyle(color: Colors.black87, fontSize: 20),
+                    enabled: !_isLocked,
+                    onSaved: (name) {
+                      setState(() {
+                        entry.name = name;
+                      });
+                    },
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10),
-                    child: TextFormField(
-                      controller: _descriptionController,
-                      decoration: InputDecoration(
-                        hintText: 'Description',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: TextFormField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      hintText: 'Description',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(0),
                       ),
-                      textAlign: TextAlign.left,
-                      textInputAction: TextInputAction.done,
-                      style: TextStyle(color: Colors.black87, fontSize: 20),
-                      enabled: !_isLocked,
-                      minLines: 1,
-                      maxLines: 5,
                     ),
+                    textAlign: TextAlign.left,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: Colors.black87, fontSize: 20),
+                    enabled: !_isLocked,
+                    onSaved: (description) {
+                      setState(() {
+                        entry.description = description;
+                      });
+                    },
+                    minLines: 1,
+                    maxLines: 5,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
