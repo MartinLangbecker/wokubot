@@ -107,6 +107,13 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => _onBackPressed(),
