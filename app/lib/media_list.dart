@@ -69,6 +69,18 @@ class _MediaListState extends State<MediaList> {
           appBar: AppBar(
             title: Text('Media List'),
             actions: [
+              Builder(builder: (BuildContext context) {
+                return IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MediaDetailsScreen(new MediaEntry()),
+                    ),
+                  ),
+                  tooltip: 'Add media entry',
+                );
+              }),
               // TODO remove delete all media button
               Builder(builder: (BuildContext context) {
                 return IconButton(
@@ -138,13 +150,13 @@ class _MediaListState extends State<MediaList> {
                         Scaffold.of(context)
                           ..removeCurrentSnackBar()
                           ..showSnackBar(
-                          SnackBar(
-                            content: (context.read<ConnectionModel>().isConnected)
-                                ? Text('Showing ${entry.name} on server ...')
-                                : Text('Preview ${entry.name} locally ...'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
+                            SnackBar(
+                              content: (context.read<ConnectionModel>().isConnected)
+                                  ? Text('Showing ${entry.name} on server ...')
+                                  : Text('Preview ${entry.name} locally ...'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                       },
                     ),
                   );
@@ -183,13 +195,13 @@ class _MediaListState extends State<MediaList> {
                         Scaffold.of(context)
                           ..removeCurrentSnackBar()
                           ..showSnackBar(
-                          SnackBar(
-                            content: (context.read<ConnectionModel>().isConnected)
-                                ? Text('Showing ${entry.name} on server ...')
-                                : Text('Preview ${entry.name} locally ...'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
+                            SnackBar(
+                              content: (context.read<ConnectionModel>().isConnected)
+                                  ? Text('Showing ${entry.name} on server ...')
+                                  : Text('Preview ${entry.name} locally ...'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                       },
                     ),
                   );
@@ -228,13 +240,13 @@ class _MediaListState extends State<MediaList> {
                         Scaffold.of(context)
                           ..removeCurrentSnackBar()
                           ..showSnackBar(
-                          SnackBar(
-                            content: (context.read<ConnectionModel>().isConnected)
-                                ? Text('Showing ${entry.name} on server ...')
-                                : Text('Preview ${entry.name} locally ...'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
+                            SnackBar(
+                              content: (context.read<ConnectionModel>().isConnected)
+                                  ? Text('Showing ${entry.name} on server ...')
+                                  : Text('Preview ${entry.name} locally ...'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                       },
                     ),
                   );
