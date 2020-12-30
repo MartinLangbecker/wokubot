@@ -1,9 +1,8 @@
 name: wokubot
 description: This app controls Wokubot.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.2.0-alpha.1
-repository:
-  https://github.com/MartinLangbecker/wokubot
+repository: https://github.com/MartinLangbecker/wokubot
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -16,6 +15,7 @@ dependencies:
   provider: ^4.0.1
   sqflite:
   path:
+  image_picker:
 
 dev_dependencies:
   flutter_test:
@@ -28,7 +28,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -40,13 +39,10 @@ flutter:
     - assets/audio/
     - assets/video/
     - data/
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
