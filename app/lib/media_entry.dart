@@ -4,24 +4,24 @@ part 'media_entry.g.dart';
 
 @JsonSerializable()
 class MediaEntry {
-  final int id;
-  final String type;
-  final String name;
-  final String description;
-  final String file;
+  int id;
+  String type;
+  String name;
+  String description;
+  String file;
 
-  MediaEntry(this.type, this.name, this.description, this.file, this.id);
+  MediaEntry([this.id, this.type, this.name, this.description, this.file]);
 
   factory MediaEntry.fromJson(Map<String, dynamic> json) => _$MediaEntryFromJson(json);
 
   Map<String, dynamic> toJson() => _$MediaEntryToJson(this);
 
   factory MediaEntry.fromMap(Map<String, dynamic> data) => new MediaEntry(
+        data['id'],
         data['type'],
         data['name'],
         data['description'],
         data['file'],
-        data['id'],
       );
 
   Map<String, dynamic> toMap() {

@@ -8,11 +8,11 @@ part of 'media_entry.dart';
 
 MediaEntry _$MediaEntryFromJson(Map<String, dynamic> json) {
   return MediaEntry(
+    json['id'] as int,
     json['type'] as String,
     json['name'] as String,
     json['description'] as String,
     json['file'] as String,
-    json['id'] as int,
   );
 }
 
