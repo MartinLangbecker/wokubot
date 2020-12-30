@@ -31,16 +31,12 @@ class DatabaseAdapter {
     );
   }
 
-  // TODO: remove hint once method is used
-  // ignore: unused_element
-  Future<void> insertMedia(MediaEntry entry) async {
+  Future<int> insertMedia(MediaEntry entry) async {
     final Database db = await database;
 
-    await db.insert('media', entry.toMapWithoutId(), conflictAlgorithm: ConflictAlgorithm.replace);
+    return await db.insert('media', entry.toMapWithoutId(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  // TODO: remove hint once method is used
-  // ignore: unused_element
   Future<List<MediaEntry>> getAllMedia() async {
     final Database db = await database;
 
@@ -83,8 +79,6 @@ class DatabaseAdapter {
     }).single;
   }
 
-  // TODO: remove hint once method is used
-  // ignore: unused_element
   Future<void> updateMedia(MediaEntry entry) async {
     final Database db = await database;
 
@@ -96,8 +90,6 @@ class DatabaseAdapter {
     );
   }
 
-  // TODO: remove hint once method is used
-  // ignore: unused_element
   Future<void> deleteMedia(int id) async {
     final Database db = await database;
 
@@ -106,5 +98,11 @@ class DatabaseAdapter {
       where: "id = ?",
       whereArgs: [id],
     );
+  }
+
+  Future<void> deleteAllMedia() async {
+    final Database db = await database;
+
+    await db.delete('media');
   }
 }
