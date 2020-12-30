@@ -13,7 +13,6 @@ class MediaDetailsScreen extends StatefulWidget {
 
 class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
-
   TextEditingController _nameController;
   TextEditingController _descriptionController;
   MediaEntry entry;
@@ -178,8 +177,10 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                         ),
                       ),
                       textAlign: TextAlign.left,
+                      textInputAction: TextInputAction.next,
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                       enabled: !_isLocked,
+                      keyboardType: TextInputType.name,
                     ),
                   ),
                   Padding(
@@ -193,6 +194,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                         ),
                       ),
                       textAlign: TextAlign.left,
+                      textInputAction: TextInputAction.done,
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                       enabled: !_isLocked,
                       minLines: 1,
