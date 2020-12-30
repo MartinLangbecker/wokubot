@@ -74,7 +74,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content: Text('Entry saved in database'),
+          content: Text('Entry ${entry.name} saved in database'),
           duration: Duration(seconds: 2),
         ));
     } else {
@@ -82,7 +82,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content: Text('Entry updated in database'),
+          content: Text('Entry ${entry.name} updated in database'),
           duration: Duration(seconds: 2),
         ));
     }
