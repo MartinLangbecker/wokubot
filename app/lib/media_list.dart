@@ -16,33 +16,37 @@ class MediaList extends StatefulWidget {
 }
 
 class _MediaListState extends State<MediaList> {
-  List<MediaEntry> images = const [];
-  List<MediaEntry> audio = const [];
-  List<MediaEntry> video = const [];
+  List<MediaEntry> _images = [];
+  List<MediaEntry> _audio = [];
+  List<MediaEntry> _video = [];
 
-  Future loadMediaList() async {
+  Future _loadMediaList() async {
+    _images = [];
+    _audio = [];
+    _video = [];
+
     DatabaseAdapter.instance.getAllMedia().then((media) {
       setState(() {
         media.forEach((entry) {
           switch (entry.type) {
             case 'image':
               {
-                images.add(entry);
+                _images.add(entry);
               }
               break;
             case 'audio':
               {
-                audio.add(entry);
+                _audio.add(entry);
               }
               break;
             case 'video':
               {
-                video.add(entry);
+                _video.add(entry);
               }
               break;
             default:
               {
-                print('MediaEntry $entry has unsupported type');
+                throw new ErrorDescription('MediaEntry ${entry.id} has unsupported type');
               }
               break;
           }
@@ -52,7 +56,7 @@ class _MediaListState extends State<MediaList> {
   }
 
   void initState() {
-    loadMediaList();
+    _loadMediaList();
     super.initState();
   }
 
@@ -64,6 +68,23 @@ class _MediaListState extends State<MediaList> {
         child: Scaffold(
           appBar: AppBar(
             title: Text('Media List'),
+            actions: [
+              // TODO remove delete all media button
+              Builder(builder: (BuildContext context) {
+                return IconButton(
+                  icon: Icon(Icons.delete_forever),
+                  onPressed: () => DatabaseAdapter.instance.deleteAllMedia(),
+                  tooltip: 'Delete all media entries',
+                );
+              }),
+              Builder(builder: (BuildContext context) {
+                return IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () async => _loadMediaList(),
+                  tooltip: 'Refresh media list',
+                );
+              }),
+            ],
             bottom: TabBar(
               tabs: [
                 Tab(
@@ -85,14 +106,14 @@ class _MediaListState extends State<MediaList> {
           body: TabBarView(
             children: [
               ListView.separated(
-                itemCount: images.length,
+                itemCount: _images.length,
                 separatorBuilder: (context, index) => Divider(),
                 itemBuilder: (BuildContext context, int index) {
-                  MediaEntry entry = images[index];
+                  MediaEntry entry = _images[index];
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
-                      child: Image.asset(entry.file),
+                      child: (entry.file != null) ? Image.asset(entry.file) : null,
                     ),
                     title: Text(entry.name),
                     subtitle: Text(
@@ -114,7 +135,9 @@ class _MediaListState extends State<MediaList> {
                         size: 50,
                       ),
                       onPressed: () {
-                        Scaffold.of(context).showSnackBar(
+                        Scaffold.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(
                           SnackBar(
                             content: (context.read<ConnectionModel>().isConnected)
                                 ? Text('Showing ${entry.name} on server ...')
@@ -128,10 +151,10 @@ class _MediaListState extends State<MediaList> {
                 },
               ),
               ListView.separated(
-                itemCount: audio.length,
+                itemCount: _audio.length,
                 separatorBuilder: (context, index) => Divider(),
                 itemBuilder: (BuildContext context, int index) {
-                  MediaEntry entry = audio[index];
+                  MediaEntry entry = _audio[index];
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
@@ -157,7 +180,9 @@ class _MediaListState extends State<MediaList> {
                         size: 50,
                       ),
                       onPressed: () {
-                        Scaffold.of(context).showSnackBar(
+                        Scaffold.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(
                           SnackBar(
                             content: (context.read<ConnectionModel>().isConnected)
                                 ? Text('Showing ${entry.name} on server ...')
@@ -171,10 +196,10 @@ class _MediaListState extends State<MediaList> {
                 },
               ),
               ListView.separated(
-                itemCount: video.length,
+                itemCount: _video.length,
                 separatorBuilder: (context, index) => Divider(),
                 itemBuilder: (BuildContext context, int index) {
-                  MediaEntry entry = video[index];
+                  MediaEntry entry = _video[index];
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
@@ -200,7 +225,9 @@ class _MediaListState extends State<MediaList> {
                         size: 50,
                       ),
                       onPressed: () {
-                        Scaffold.of(context).showSnackBar(
+                        Scaffold.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(
                           SnackBar(
                             content: (context.read<ConnectionModel>().isConnected)
                                 ? Text('Showing ${entry.name} on server ...')
