@@ -29,6 +29,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
 
   Future<bool> _onBackPressed() {
     // TODO don't show dialogue if no changes were made
+    // if changes were made, ask if user wants to save (Yes/No/Discard)
+    // TODO extract dialog to separate method/class
     return (!_isLocked)
         ? showDialog(
             context: context,
@@ -144,7 +146,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
         if (willPop) {
           Navigator.pop(context, entry);
         }
-        return Future<bool>.value(true);
+        return Future<bool>.value(false);
       }),
       child: SafeArea(
         child: Scaffold(
@@ -210,7 +212,6 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                       textInputAction: TextInputAction.next,
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                       enabled: !_isLocked,
-                      keyboardType: TextInputType.name,
                     ),
                   ),
                   Padding(
