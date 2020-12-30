@@ -29,33 +29,55 @@ class _MediaListState extends State<MediaList> {
     _emptyLists();
 
     DatabaseAdapter.instance.getAllMedia().then((media) {
-      setState(() {
-        media.forEach((entry) {
-          switch (entry.type) {
-            case 'image':
-              {
-                _images.add(entry);
-              }
-              break;
-            case 'audio':
-              {
-                _audio.add(entry);
-              }
-              break;
-            case 'video':
-              {
-                _video.add(entry);
-              }
-              break;
-            default:
-              {
-                throw new ErrorDescription('MediaEntry ${entry.id} has unsupported type');
-              }
-              break;
-          }
-        });
+      media.forEach((entry) {
+        _addToList(entry);
       });
     }).catchError((error) => print(error));
+  }
+
+  void _addToList(MediaEntry entry) {
+    if (entry == null) return;
+
+    List<MediaEntry> list = _getList(entry);
+    setState(() => list.add(entry));
+  }
+
+  void _updateList(MediaEntry entry) {
+    if (entry == null) return;
+
+    List<MediaEntry> list = _getList(entry);
+    setState(() => list[list.indexWhere((element) => element.id == entry.id)] = entry);
+  }
+
+  void _removeFromList(MediaEntry entry) {
+    if (entry == null) return;
+
+    List<MediaEntry> list = _getList(entry);
+    setState(() => list.removeWhere((element) => element.id == entry.id));
+  }
+
+  List<MediaEntry> _getList(entry) {
+    switch (entry.type) {
+      case 'image':
+        {
+          return _images;
+        }
+        break;
+      case 'audio':
+        {
+          return _audio;
+        }
+        break;
+      case 'video':
+        {
+          return _video;
+        }
+        break;
+      default:
+        {
+          throw new ErrorDescription('MediaEntry ${entry.id} has unsupported type');
+        }
+    }
   }
 
   void _emptyLists() {
@@ -100,6 +122,26 @@ class _MediaListState extends State<MediaList> {
     });
   }
 
+  void _navigateAndUpdateList(MediaEntry entry) async {
+    final MediaEntry result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MediaDetailsScreen(entry),
+      ),
+    );
+
+    if (result == null) return;
+    if (entry.id == null && result.id != null) {
+      _addToList(result);
+    } else if (entry.id != null && result.id != null) {
+      _updateList(result);
+    } else if (entry.id != null && result.id == null) {
+      _removeFromList(entry);
+    } else {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -112,12 +154,7 @@ class _MediaListState extends State<MediaList> {
               Builder(builder: (BuildContext context) {
                 return IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MediaDetailsScreen(new MediaEntry()),
-                    ),
-                  ),
+                  onPressed: () => _navigateAndUpdateList(new MediaEntry()),
                   tooltip: 'Add media entry',
                 );
               }),
@@ -174,12 +211,7 @@ class _MediaListState extends State<MediaList> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     isThreeLine: true,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MediaDetailsScreen(entry),
-                      ),
-                    ),
+                    onTap: () => _navigateAndUpdateList(entry),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.play_circle_filled,

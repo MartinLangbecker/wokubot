@@ -22,12 +22,13 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   _MediaDetailsScreenState(MediaEntry entry) {
     _nameController = TextEditingController(text: entry.name);
     _descriptionController = TextEditingController(text: entry.description);
-    this.entry = entry;
+    this.entry = entry.copyWith();
     _newEntry = entry.id == null;
     _isLocked = !_newEntry;
   }
 
   Future<bool> _onBackPressed() {
+    // TODO don't show dialogue if no changes were made
     return (!_isLocked)
         ? showDialog(
             context: context,
@@ -48,6 +49,27 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
             ),
           )
         : Future<bool>.value(true);
+  }
+
+  Future<bool> _onDeletePressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you really want to delete this entry from the database?'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () => Navigator.pop(context, false),
+            child: Text("NO"),
+          ),
+          SizedBox(height: 16),
+          new GestureDetector(
+            onTap: () => Navigator.pop(context, true),
+            child: Text("YES"),
+          ),
+        ],
+      ),
+    );
   }
 
   void _saveEntry(BuildContext context) {
@@ -88,21 +110,24 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   }
 
   void _deleteEntry(BuildContext context) {
-    // TODO add popup asking for confirmation
-    DatabaseAdapter.instance.deleteMedia(entry.id);
-    setState(() {
-      _nameController.clear();
-      _descriptionController.clear();
-      entry = new MediaEntry();
-      _newEntry = true;
-      _isLocked = false;
+    _onDeletePressed().then((deletionConfirmed) {
+      if (deletionConfirmed) {
+        DatabaseAdapter.instance.deleteMedia(entry.id);
+        setState(() {
+          _nameController.clear();
+          _descriptionController.clear();
+          entry = new MediaEntry();
+          _newEntry = true;
+          _isLocked = false;
+        });
+        Scaffold.of(context)
+          ..removeCurrentSnackBar()
+          ..showSnackBar(SnackBar(
+            content: Text('Entry deleted from database'),
+            duration: Duration(seconds: 2),
+          ));
+      }
     });
-    Scaffold.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        content: Text('Entry deleted from database'),
-        duration: Duration(seconds: 2),
-      ));
   }
 
   @override
@@ -115,7 +140,12 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onBackPressed(),
+      onWillPop: () => _onBackPressed().then((willPop) {
+        if (willPop) {
+          Navigator.pop(context, entry);
+        }
+        return Future<bool>.value(true);
+      }),
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
