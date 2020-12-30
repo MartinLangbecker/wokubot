@@ -92,17 +92,16 @@ class _MediaListState extends State<MediaList> {
     showDialog<bool>(
       context: context,
       builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
+        title: new Text('Delete all media?'),
         content: new Text('Do you REALLY want to delete all media from the database?'),
         actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.pop(context, false),
-            child: Text("NO"),
+          new FlatButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text("No"),
           ),
-          SizedBox(height: 16),
-          new GestureDetector(
-            onTap: () => Navigator.pop(context, true),
-            child: Text("YES"),
+          new FlatButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text("Yes"),
           ),
         ],
       ),

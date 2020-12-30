@@ -27,50 +27,44 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     _isLocked = !_newEntry;
   }
 
+  // TODO extract method to utility class
+  Future<T> _showYesNoDialog<T>({BuildContext context, String title, String content}) {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text(title),
+        content: new Text(content),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text("No"),
+          ),
+          new FlatButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text("Yes"),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<bool> _onBackPressed() {
     // TODO don't show dialogue if no changes were made
-    // if changes were made, ask if user wants to save (Yes/No/Discard)
-    // TODO extract dialog to separate method/class
+    // TODO if changes were made, ask if user wants to save (Yes/No/Discard)
     return (!_isLocked)
-        ? showDialog(
+        ? _showYesNoDialog(
             context: context,
-            builder: (context) => new AlertDialog(
-              title: new Text('Are you sure?'),
-              content: new Text('Do you want to return without saving changes?'),
-              actions: <Widget>[
-                new GestureDetector(
-                  onTap: () => Navigator.pop(context, false),
-                  child: Text("NO"),
-                ),
-                SizedBox(height: 16),
-                new GestureDetector(
-                  onTap: () => Navigator.pop(context, true),
-                  child: Text("YES"),
-                ),
-              ],
-            ),
+            title: 'Exit without saving?',
+            content: 'Do you want to return without saving changes?',
           )
         : Future<bool>.value(true);
   }
 
   Future<bool> _onDeletePressed() {
-    return showDialog(
+    return _showYesNoDialog(
       context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you really want to delete this entry from the database?'),
-        actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.pop(context, false),
-            child: Text("NO"),
-          ),
-          SizedBox(height: 16),
-          new GestureDetector(
-            onTap: () => Navigator.pop(context, true),
-            child: Text("YES"),
-          ),
-        ],
-      ),
+      title: 'Delete entry?',
+      content: 'Do you really want to delete this entry from the database?',
     );
   }
 
