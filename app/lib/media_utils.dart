@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
@@ -34,5 +35,11 @@ class MediaUtils {
       default:
         throw new ErrorDescription('File type $extension is not supported');
     }
+  }
+
+  static Future<File> writeToFile({ByteData data, String path, bool flush = false}) {
+    final ByteBuffer buffer = data.buffer;
+    List<int> bytes = buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    return new File(path).writeAsBytes(bytes, flush: flush);
   }
 }

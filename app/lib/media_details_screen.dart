@@ -80,7 +80,9 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
     _formKey.currentState.save();
 
-    final String path = await getApplicationDocumentsDirectory().then((directory) => directory.path);
+    // FIXME getExternalStorageDirectory() will not work on iOS
+    // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
+    final String path = await getExternalStorageDirectory().then((directory) => directory.path);
 
     if (entry.file == null) entry.file = 'assets/images/placeholder.png';
     final String basename = p.basename(entry.file);
@@ -94,10 +96,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
 
     setState(() {
-      entry.name = _nameController.text;
-      entry.description = _descriptionController.text;
       entry.file = file.path;
-      entry.type = MediaUtils.detectFileType(file);
     });
 
     if (_newEntry) {
@@ -155,6 +154,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     if (pickedFile != null) {
       setState(() {
         entry.file = pickedFile.path;
+        entry.type = MediaUtils.detectFileType(File(pickedFile.path));
       });
     }
   }
@@ -258,11 +258,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                     textInputAction: TextInputAction.next,
                     style: TextStyle(color: Colors.black87, fontSize: 20),
                     enabled: !_isLocked,
-                    onSaved: (name) {
-                      setState(() {
-                        entry.name = name;
-                      });
-                    },
+                    onSaved: (name) => setState(() => entry.name = name),
                   ),
                 ),
                 Padding(
@@ -279,11 +275,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black87, fontSize: 20),
                     enabled: !_isLocked,
-                    onSaved: (description) {
-                      setState(() {
-                        entry.description = description;
-                      });
-                    },
+                    onSaved: (description) => setState(() => entry.description = description),
                     minLines: 1,
                     maxLines: 5,
                   ),

@@ -14,6 +14,11 @@ class MediaEntry {
 
   MediaEntry([this.id, this.name, this.description, this.file, this.type]);
 
+  @override
+  String toString() {
+    return 'MediaEntry: ${toJson()}';
+  }
+
   factory MediaEntry.fromJson(Map<String, dynamic> json) => _$MediaEntryFromJson(json);
 
   Map<String, dynamic> toJson() => _$MediaEntryToJson(this);

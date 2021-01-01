@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:wokubot/app_drawer.dart';
 import 'package:wokubot/connection_model.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_details_screen.dart';
 import 'package:wokubot/media_entry.dart';
+import 'package:wokubot/media_utils.dart';
 
 class MediaListScreen extends StatefulWidget {
   final MediaType type;
@@ -23,16 +27,61 @@ class _MediaListScreenState extends State<MediaListScreen> {
   List<MediaEntry> _video = [];
 
   void initState() {
+    _insertInitialEntries();
     _loadMediaList();
     super.initState();
   }
 
   Future _loadMediaList() async {
     _emptyLists();
+    _reloadMediaLists();
+  }
 
+  void _emptyLists() {
+    setState(() {
+      _images = [];
+      _audio = [];
+      _video = [];
+    });
+  }
+
+  void _insertInitialEntries() async {
+    final List<String> initialEntries = [
+      'images/wokubot_hearts.png',
+      'images/wokubot_main.jpg',
+      'images/wokubot_sad.jpg',
+      'images/wokubot_sings.jpg',
+      'images/wokubot_smokes.jpg',
+      'audio/freude.mp3',
+      'video/freude.mp4',
+    ];
+    // FIXME getExternalStorageDirectory() will not work on iOS
+    // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
+    final String path = await getExternalStorageDirectory().then((directory) => directory.path);
+    initialEntries.forEach((element) async {
+      final String basename = p.basename(element);
+      if (!File('$path/$basename').existsSync()) {
+        ByteData data = await rootBundle.load('assets/$element');
+        File file = await MediaUtils.writeToFile(data: data, path: '$path/$basename', flush: true);
+        DatabaseAdapter.instance.insertMedia(
+          new MediaEntry(
+            null,
+            p.basenameWithoutExtension(file.path),
+            p.basenameWithoutExtension(file.path),
+            file.path,
+            MediaUtils.detectFileType(file),
+          ),
+        );
+      }
+    });
+  }
+
+  void _reloadMediaLists() {
     DatabaseAdapter.instance.getAllMedia().then((media) {
+      print('Media in database:'); // TODO remove after debugging
       media.forEach((entry) {
         _addToList(entry);
+        print(entry.toString()); // TODO remove after debugging
       });
     }).catchError((error) => print(error));
   }
@@ -80,14 +129,6 @@ class _MediaListScreenState extends State<MediaListScreen> {
           throw new ErrorDescription('MediaEntry ${entry.id} has unsupported type');
         }
     }
-  }
-
-  void _emptyLists() {
-    setState(() {
-      _images = [];
-      _audio = [];
-      _video = [];
-    });
   }
 
   void _deleteAllMedia(BuildContext context) {
@@ -195,7 +236,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
           drawer: AppDrawer(),
           body: TabBarView(
             children: [
-              // TODO refactor: extract into widget MediaList(List<MediaType>, ...)
+              // TODO refactor: extract into widget MediaList(List<MediaType>, ...) and/or MediaListModel with ChangeNotifier
               ListView.separated(
                 itemCount: _images.length,
                 separatorBuilder: (context, index) => Divider(),
