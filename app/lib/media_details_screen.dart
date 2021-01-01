@@ -79,8 +79,9 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
     _formKey.currentState.save();
 
-    // TODO create fallback image in case no media file was selected
     final String path = await getApplicationDocumentsDirectory().then((directory) => directory.path);
+
+    if (entry.file == null) entry.file = 'assets/images/placeholder.png';
     final String basename = p.basename(entry.file);
 
     File file;

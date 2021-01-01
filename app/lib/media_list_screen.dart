@@ -195,6 +195,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
           drawer: AppDrawer(),
           body: TabBarView(
             children: [
+              // TODO refactor: extract into widget MediaList(List<MediaType>, ...)
               ListView.separated(
                 itemCount: _images.length,
                 separatorBuilder: (context, index) => Divider(),
