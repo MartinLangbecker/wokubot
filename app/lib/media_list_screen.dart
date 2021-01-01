@@ -8,16 +8,16 @@ import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_details_screen.dart';
 import 'package:wokubot/media_entry.dart';
 
-class MediaList extends StatefulWidget {
-  final String type;
+class MediaListScreen extends StatefulWidget {
+  final MediaType type;
 
-  MediaList({Key key, this.type = 'images'}) : super(key: key);
+  MediaListScreen({Key key, this.type = MediaType.IMAGE}) : super(key: key);
 
   @override
-  _MediaListState createState() => _MediaListState();
+  _MediaListScreenState createState() => _MediaListScreenState();
 }
 
-class _MediaListState extends State<MediaList> {
+class _MediaListScreenState extends State<MediaListScreen> {
   List<MediaEntry> _images = [];
   List<MediaEntry> _audio = [];
   List<MediaEntry> _video = [];

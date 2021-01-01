@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wokubot/media_list.dart';
+import 'package:wokubot/media_list_screen.dart';
 import 'package:wokubot/recording_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class _MainScreenState extends State<MainScreen> {
     return SafeArea(
       child: Scaffold(
         body: [
-          MediaList(),
+          MediaListScreen(),
           RecordingScreen(),
         ].elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
