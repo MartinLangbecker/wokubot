@@ -244,7 +244,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
-                      child: Image.file(File(entry.file)),
+                      child: Image.asset('assets/images/audio_placeholder.png'),
                     ),
                     title: Text(entry.name),
                     subtitle: Text(
@@ -289,7 +289,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
-                      child: Image.file(File(entry.file)),
+                      child: Image.asset('assets/images/video_placeholder.png'),
                     ),
                     title: Text(entry.name),
                     subtitle: Text(

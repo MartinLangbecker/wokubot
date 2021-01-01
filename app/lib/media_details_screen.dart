@@ -159,6 +159,23 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
   }
 
+  // TODO replace placeholder images once video/audio player is implemented
+  Image _getImage(MediaEntry entry) {
+    switch (entry.type) {
+      case MediaType.IMAGE:
+        return Image.file(File(entry.file));
+        break;
+      case MediaType.AUDIO:
+        return Image.asset('assets/images/audio_placeholder.png');
+        break;
+      case MediaType.VIDEO:
+        return Image.asset('assets/images/video_placeholder.png');
+        break;
+      default:
+        throw new ErrorDescription('File type ${entry.type} is not supported');
+    }
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -217,7 +234,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                       child: SizedBox(
                         height: 300,
                         child: (entry.file != null)
-                            ? Image.file(File(entry.file))
+                            ? _getImage(entry)
                             : Icon(
                                 Icons.add,
                                 size: 64,
