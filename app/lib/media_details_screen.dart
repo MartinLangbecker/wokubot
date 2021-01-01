@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_entry.dart';
+import 'package:wokubot/media_utils.dart';
 
 class MediaDetailsScreen extends StatefulWidget {
   final MediaEntry entry;
@@ -96,7 +97,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
       entry.name = _nameController.text;
       entry.description = _descriptionController.text;
       entry.file = file.path;
-      entry.type = _detectFileType(file);
+      entry.type = MediaUtils.detectFileType(file);
     });
 
     if (_newEntry) {
@@ -120,44 +121,6 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
           content: Text('Entry ${entry.name} updated in database'),
           duration: Duration(seconds: 2),
         ));
-    }
-  }
-
-  // TODO extract to utils class
-  MediaType _detectFileType(File file) {
-    final String extension = p.extension(file.path).toLowerCase();
-    switch (extension) {
-      case '.bmp':
-      case '.gif':
-      case '.heic':
-      case '.heif':
-      case '.jpg':
-      case '.jpeg':
-      case '.png':
-      case '.webp':
-        {
-          return MediaType.IMAGE;
-        }
-      case '.3gp':
-      case '.aac':
-      case '.amr':
-      case '.flac':
-      case '.m4a':
-      case '.mp3':
-      case '.ogg':
-      case '.ts':
-      case '.wav':
-        {
-          return MediaType.AUDIO;
-        }
-      case '.mkv':
-      case '.mp4':
-      case '.webm':
-        {
-          return MediaType.VIDEO;
-        }
-      default:
-        throw new ErrorDescription('File type $extension is not supported');
     }
   }
 
