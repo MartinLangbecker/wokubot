@@ -16,9 +16,7 @@ class MediaUtils {
       case '.jpeg':
       case '.png':
       case '.webp':
-        {
-          return MediaType.IMAGE;
-        }
+        return MediaType.IMAGE;
       case '.3gp':
       case '.aac':
       case '.amr':
@@ -28,15 +26,11 @@ class MediaUtils {
       case '.ogg':
       case '.ts':
       case '.wav':
-        {
-          return MediaType.AUDIO;
-        }
+        return MediaType.AUDIO;
       case '.mkv':
       case '.mp4':
       case '.webm':
-        {
-          return MediaType.VIDEO;
-        }
+        return MediaType.VIDEO;
       default:
         throw new ErrorDescription('File type $extension is not supported');
     }

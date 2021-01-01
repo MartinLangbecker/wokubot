@@ -49,13 +49,13 @@ class DatabaseAdapter {
 
   // TODO: remove hint once method is used
   // ignore: unused_element
-  Future<List<MediaEntry>> getMediaByType(String type) async {
+  Future<List<MediaEntry>> getMediaByType(MediaType type) async {
     final Database db = await database;
 
     final List<Map<String, dynamic>> media = await db.query(
       'media',
       where: "type = ?",
-      whereArgs: [type],
+      whereArgs: [type.toString()],
     );
 
     return List<MediaEntry>.generate(media.length, (i) {
