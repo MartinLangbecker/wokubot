@@ -33,32 +33,11 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     _isLocked = !_newEntry;
   }
 
-  // TODO extract method to utility class
-  Future<T> _showYesNoDialog<T>({BuildContext context, String title, String content}) {
-    return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text(title),
-        content: new Text(content),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text("No"),
-          ),
-          new FlatButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text("Yes"),
-          ),
-        ],
-      ),
-    );
-  }
-
   Future<bool> _onBackPressed(BuildContext context) {
     // TODO don't show dialogue if no changes were made
     // TODO if changes were made, ask if user wants to save (Yes/No/Discard)
     return (!_isLocked)
-        ? _showYesNoDialog(
+        ? MediaUtils.showYesNoDialog<bool>(
             context: context,
             title: 'Exit without saving?',
             content: 'Do you want to return without saving changes?',
@@ -67,7 +46,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   }
 
   Future<bool> _onDeletePressed(BuildContext context) {
-    return _showYesNoDialog(
+    return MediaUtils.showYesNoDialog<bool>(
       context: context,
       title: 'Delete entry?',
       content: 'Do you really want to delete this entry from the database?',

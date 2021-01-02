@@ -21,12 +21,13 @@ class DatabaseAdapter {
   }
 
   Future<Database> _initDatabase() async {
+    dev.log('Initializing database $_databaseName ...', name: 'DatabaseAdapter');
     WidgetsFlutterBinding.ensureInitialized();
 
     return await openDatabase(
       join(await getDatabasesPath(), _databaseName, _databaseExtension),
       onCreate: (db, version) {
-        dev.log('created database $_databaseName', name: 'DatabaseAdapter');
+        dev.log('Creating database $_databaseName ...', name: 'DatabaseAdapter');
         return db.execute(
           "CREATE TABLE $_databaseName(id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, name TEXT, description TEXT, file TEXT)",
         );
@@ -36,17 +37,17 @@ class DatabaseAdapter {
   }
 
   Future<int> insertMedia(MediaEntry entry) async {
+    dev.log('Inserting ${entry.toString()} into database $_databaseName ...', name: 'DatabaseAdapter');
     final Database db = await database;
 
-    dev.log('Insert MediaEntry ${entry.toString()} into database $_databaseName', name: 'DatabaseAdapter');
     return await db.insert(_databaseName, entry.toMapWithoutId(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<List<MediaEntry>> getAllMedia() async {
+    dev.log('Getting all media from database $_databaseName ...', name: 'DatabaseAdapter');
     final Database db = await database;
     final List<Map<String, dynamic>> media = await db.query(_databaseName);
 
-    dev.log('Get all media from database $_databaseName', name: 'DatabaseAdapter');
     return List<MediaEntry>.generate(media.length, (i) {
       return MediaEntry.fromMap(media[i]);
     });
@@ -55,6 +56,7 @@ class DatabaseAdapter {
   // TODO: remove hint once method is used
   // ignore: unused_element
   Future<List<MediaEntry>> getMediaByType(MediaType type) async {
+    dev.log('Getting media by type ${type.toString()} from database $_databaseName ...', name: 'DatabaseAdapter');
     final Database db = await database;
     final List<Map<String, dynamic>> media = await db.query(
       _databaseName,
@@ -62,7 +64,6 @@ class DatabaseAdapter {
       whereArgs: [type.toString()],
     );
 
-    dev.log('Get media by type ${type.toString()} from database $_databaseName', name: 'DatabaseAdapter');
     return List<MediaEntry>.generate(media.length, (i) {
       return MediaEntry.fromMap(media[i]);
     });
@@ -71,6 +72,7 @@ class DatabaseAdapter {
   // TODO: remove hint once method is used
   // ignore: unused_element
   Future<MediaEntry> getMediaById(int id) async {
+    dev.log('Getting media with id $id from database $_databaseName ...', name: 'DatabaseAdapter');
     final Database db = await database;
     final List<Map<String, dynamic>> media = await db.query(
       _databaseName,
@@ -78,16 +80,15 @@ class DatabaseAdapter {
       whereArgs: [id],
     );
 
-    dev.log('Get media by id $id from database $_databaseName', name: 'DatabaseAdapter');
     return List<MediaEntry>.generate(media.length, (i) {
       return MediaEntry.fromMap(media[i]);
     }).single;
   }
 
   Future<void> updateMedia(MediaEntry entry) async {
+    dev.log('Updating ${entry.toString()} in database $_databaseName ...', name: 'DatabaseAdapter');
     final Database db = await database;
 
-    dev.log('Update MediaEntry ${entry.toString()} in database $_databaseName', name: 'DatabaseAdapter');
     await db.update(
       _databaseName,
       entry.toMap(),
@@ -97,9 +98,9 @@ class DatabaseAdapter {
   }
 
   Future<void> deleteMedia(int id) async {
+    dev.log('Deleting MediaEntry with id $id from database $_databaseName ...', name: 'DatabaseAdapter');
     final Database db = await database;
 
-    dev.log('Delete MediaEntry with id $id from database $_databaseName', name: 'DatabaseAdapter');
     await db.delete(
       _databaseName,
       where: "id = ?",
@@ -108,9 +109,9 @@ class DatabaseAdapter {
   }
 
   Future<void> deleteAllMedia() async {
+    dev.log('Deleting all media from database $_databaseName ...', name: 'DatabaseAdapter');
     final Database db = await database;
 
-    dev.log('Delete all media from database $_databaseName', name: 'DatabaseAdapter');
     await db.delete(_databaseName);
   }
 }

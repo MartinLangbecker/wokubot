@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _emptyLists() {
+    dev.log('Emptying media lists ...', name: 'MediaListScreen');
     setState(() {
       _images = [];
       _audio = [];
@@ -46,6 +48,8 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _insertInitialEntries() async {
+    dev.log('Inserting initial entries into database ...', name: 'MediaListScreen');
+    // TODO add all appropriate entries
     final List<String> initialEntries = [
       'images/wokubot_hearts.png',
       'images/wokubot_main.jpg',
@@ -78,10 +82,9 @@ class _MediaListScreenState extends State<MediaListScreen> {
 
   void _reloadMediaLists() {
     DatabaseAdapter.instance.getAllMedia().then((media) {
-      print('Media in database:'); // TODO remove after debugging
+      dev.log('Reloading media lists ...', name: 'MediaListScreen');
       media.forEach((entry) {
         _addToList(entry);
-        print(entry.toString()); // TODO remove after debugging
       });
     }).catchError((error) => print(error));
   }
@@ -90,6 +93,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
     if (entry == null) return;
 
     List<MediaEntry> list = _getList(entry);
+    dev.log('Add ${entry.toString()}', name: 'MediaListScreen');
     setState(() => list.add(entry));
   }
 
@@ -97,6 +101,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
     if (entry == null) return;
 
     List<MediaEntry> list = _getList(entry);
+    dev.log('Update ${entry.toString()}', name: 'MediaListScreen');
     setState(() => list[list.indexWhere((element) => element.id == entry.id)] = entry);
   }
 
@@ -104,6 +109,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
     if (entry == null) return;
 
     List<MediaEntry> list = _getList(entry);
+    dev.log('Remove ${entry.toString()}', name: 'MediaListScreen');
     setState(() => list.removeWhere((element) => element.id == entry.id));
   }
 
@@ -132,22 +138,11 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _deleteAllMedia(BuildContext context) {
-    showDialog<bool>(
+    dev.log('Deleting all media from media lists ...', name: 'MediaListScreen');
+    MediaUtils.showYesNoDialog<bool>(
       context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Delete all media?'),
-        content: new Text('Do you REALLY want to delete all media from the database?'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text("No"),
-          ),
-          new FlatButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text("Yes"),
-          ),
-        ],
-      ),
+      title: 'Delete all media?',
+      content: 'Do you REALLY want to delete all media from the database?',
     ).then((deleteConfirmed) {
       if (deleteConfirmed) {
         DatabaseAdapter.instance.deleteAllMedia();
@@ -165,6 +160,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _navigateAndUpdateList(MediaEntry entry) async {
+    dev.log('Navigating to MediaDetailsScreen ...', name: 'MediaListScreen');
     final MediaEntry result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -285,7 +281,10 @@ class _MediaListScreenState extends State<MediaListScreen> {
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
-                      child: Image.asset('assets/images/audio_placeholder.png'),
+                      child: Icon(
+                        Icons.audiotrack,
+                        size: 40,
+                      ),
                     ),
                     title: Text(entry.name),
                     subtitle: Text(
@@ -330,7 +329,10 @@ class _MediaListScreenState extends State<MediaListScreen> {
                   return ListTile(
                     leading: SizedBox(
                       height: 120,
-                      child: Image.asset('assets/images/video_placeholder.png'),
+                      child: Icon(
+                        Icons.local_movies,
+                        size: 40,
+                      ),
                     ),
                     title: Text(entry.name),
                     subtitle: Text(
