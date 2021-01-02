@@ -19,6 +19,24 @@ class MediaEntry {
     return 'MediaEntry: ${toJson()}';
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaEntry &&
+          id == other.id &&
+          name == other.name &&
+          description == other.description &&
+          file == other.file &&
+          type == other.type;
+
+  @override
+  int get hashCode =>
+      identityHashCode(id) ^
+      identityHashCode(name) ^
+      identityHashCode(description) ^
+      identityHashCode(file) ^
+      identityHashCode(type);
+
   factory MediaEntry.fromJson(Map<String, dynamic> json) => _$MediaEntryFromJson(json);
 
   Map<String, dynamic> toJson() => _$MediaEntryToJson(this);

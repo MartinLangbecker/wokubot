@@ -101,8 +101,12 @@ class _MediaListScreenState extends State<MediaListScreen> {
     if (entry == null) return;
 
     List<MediaEntry> list = _getList(entry);
-    dev.log('Update ${entry.toString()}', name: 'MediaListScreen');
-    setState(() => list[list.indexWhere((element) => element.id == entry.id)] = entry);
+    final int index = list.indexWhere((element) => element.id == entry.id);
+    final MediaEntry oldEntry = list[index];
+    if (entry != oldEntry) {
+      dev.log('Update ${entry.toString()}', name: 'MediaListScreen');
+      setState(() => list[index] = entry);
+    }
   }
 
   void _removeFromList(MediaEntry entry) {
@@ -160,7 +164,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _navigateAndUpdateList(MediaEntry entry) async {
-    dev.log('Navigating to MediaDetailsScreen ...', name: 'MediaListScreen');
+    dev.log('Navigating to MediaDetailsScreen for entry ${entry.toString()} ...', name: 'MediaListScreen');
     final MediaEntry result = await Navigator.push(
       context,
       MaterialPageRoute(
