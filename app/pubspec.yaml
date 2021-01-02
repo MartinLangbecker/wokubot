@@ -17,6 +17,8 @@ dependencies:
   path:
   path_provider:
   image_picker:
+  file_picker:
+  video_player:
 
 dev_dependencies:
   flutter_test:

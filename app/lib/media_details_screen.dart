@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:wokubot/database_adapter.dart';
@@ -123,17 +123,13 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     });
   }
 
-  void _selectImage() async {
-    PickedFile pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-      maxWidth: 1920,
-      maxHeight: 1080,
-    );
+  void _pickFile() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(allowCompression: true);
 
-    if (pickedFile != null) {
+    if (result != null) {
       setState(() {
-        entry.file = pickedFile.path;
-        entry.type = MediaUtils.detectFileType(File(pickedFile.path));
+        entry.file = result.files.first.path;
+        entry.type = MediaUtils.detectFileType(File(result.files.first.path));
       });
     }
   }
@@ -220,7 +216,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                               ),
                       ),
                     ),
-                    onTap: (_isLocked) ? null : () => _selectImage(),
+                    onTap: (_isLocked) ? null : () => _pickFile(),
                   ),
                 ),
                 Padding(
