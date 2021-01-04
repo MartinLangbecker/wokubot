@@ -47,5 +47,10 @@
 		<string>Upload image from camera for Wokubot screen</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Record sound for voice output</string>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true />
+		</dict>
 	</dict>
 </plist>

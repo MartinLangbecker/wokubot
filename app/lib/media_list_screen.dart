@@ -14,15 +14,12 @@ import 'package:wokubot/media_entry.dart';
 import 'package:wokubot/utils/media_utils.dart';
 
 class MediaListScreen extends StatefulWidget {
-  final MediaType type;
-
-  MediaListScreen({Key key, this.type = MediaType.IMAGE}) : super(key: key);
-
   @override
   _MediaListScreenState createState() => _MediaListScreenState();
 }
 
 class _MediaListScreenState extends State<MediaListScreen> {
+  // TODO refactor: unite into single list and/or create model
   List<MediaEntry> _images = [];
   List<MediaEntry> _audio = [];
   List<MediaEntry> _video = [];
