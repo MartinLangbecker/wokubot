@@ -198,6 +198,11 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   }
 
   @override
+  void setState(void Function() func) {
+    if (mounted) super.setState(func);
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _nameController.dispose();

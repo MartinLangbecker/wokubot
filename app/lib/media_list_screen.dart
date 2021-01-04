@@ -94,15 +94,17 @@ class _MediaListScreenState extends State<MediaListScreen> {
     setState(() => list.add(entry));
   }
 
-  void _updateList(MediaEntry entry) {
-    if (entry == null) return;
+  void _updateList(MediaEntry oldEntry, MediaEntry newEntry) {
+    if (newEntry == null) return;
 
-    List<MediaEntry> list = _getList(entry);
-    final int index = list.indexWhere((element) => element.id == entry.id);
-    final MediaEntry oldEntry = list[index];
-    if (entry != oldEntry) {
-      dev.log('Update ${entry.toString()}', name: 'MediaListScreen');
-      setState(() => list[index] = entry);
+    if (newEntry.type != oldEntry.type) {
+      _removeFromList(oldEntry);
+      _addToList(newEntry);
+    } else if (newEntry != oldEntry) {
+      List<MediaEntry> list = _getList(newEntry);
+      final int index = list.indexWhere((element) => element.id == newEntry.id);
+      dev.log('Update ${oldEntry.toString()} with ${newEntry.toString()}', name: 'MediaListScreen');
+      setState(() => list[index] = newEntry);
     }
   }
 
@@ -111,7 +113,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
 
     List<MediaEntry> list = _getList(entry);
     dev.log('Remove ${entry.toString()}', name: 'MediaListScreen');
-    setState(() => list.removeWhere((element) => element.id == entry.id));
+    setState(() => list.remove(entry));
   }
 
   List<MediaEntry> _getList(entry) {
@@ -173,7 +175,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
     if (entry.id == null && result.id != null) {
       _addToList(result);
     } else if (entry.id != null && result.id != null) {
-      _updateList(result);
+      _updateList(entry, result);
     } else if (entry.id != null && result.id == null) {
       _removeFromList(entry);
     } else {
@@ -294,12 +296,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     isThreeLine: true,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MediaDetailsScreen(entry),
-                      ),
-                    ),
+                    onTap: () => _navigateAndUpdateList(entry),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.play_circle_filled,
@@ -342,12 +339,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     isThreeLine: true,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MediaDetailsScreen(entry),
-                      ),
-                    ),
+                    onTap: () => _navigateAndUpdateList(entry),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.play_circle_filled,
