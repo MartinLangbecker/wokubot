@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_entry.dart';
-import 'package:wokubot/media_utils.dart';
+import 'package:wokubot/utils/media_utils.dart';
 
 class MediaDetailsScreen extends StatefulWidget {
   final MediaEntry entry;

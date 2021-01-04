@@ -11,7 +11,7 @@ import 'package:wokubot/connection_model.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_details_screen.dart';
 import 'package:wokubot/media_entry.dart';
-import 'package:wokubot/media_utils.dart';
+import 'package:wokubot/utils/media_utils.dart';
 
 class MediaListScreen extends StatefulWidget {
   final MediaType type;
