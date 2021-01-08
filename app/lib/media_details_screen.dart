@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
@@ -63,23 +64,29 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
     _formKey.currentState.save();
 
+    if (entry.file == null) entry.file = 'assets/images/placeholder.png';
+
     // FIXME getExternalStorageDirectory() will not work on iOS
     // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
     final String path = await getExternalStorageDirectory().then((directory) => directory.path);
-
-    if (entry.file == null) entry.file = 'assets/images/placeholder.png';
     final String basename = p.basename(entry.file);
-
     File file;
-    // TODO improve caching (?)
+
     if (!File('$path/$basename').existsSync()) {
-      file = await File(entry.file).copy('$path/$basename');
+      // TODO improve caching (?)
+      bool fromAsset = (basename == 'placeholder.png');
+      file = await _copyFile(
+        filePath: entry.file,
+        newPath: '$path/$basename',
+        fromAsset: fromAsset,
+      );
     } else {
       file = File('$path/$basename');
     }
 
     setState(() {
       entry.file = file.path;
+      entry.type = MediaUtils.detectFileType(file);
       _hasChanged = false;
     });
 
@@ -107,6 +114,18 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
   }
 
+  Future<File> _copyFile({@required String filePath, @required String newPath, fromAsset = false}) async {
+    Future<File> file;
+    if (fromAsset) {
+      ByteData data = await rootBundle.load(filePath);
+      file = MediaUtils.writeToFile(data: data, path: newPath, flush: true);
+    } else {
+      file = File(filePath).copy(newPath);
+    }
+
+    return file;
+  }
+
   void _deleteEntry(BuildContext context) {
     _onDeletePressed(context).then((deletionConfirmed) {
       if (deletionConfirmed) {
@@ -121,10 +140,12 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
         });
         Scaffold.of(context)
           ..removeCurrentSnackBar()
-          ..showSnackBar(SnackBar(
+          ..showSnackBar(
+            SnackBar(
             content: Text('Entry deleted from database'),
             duration: Duration(seconds: 2),
-          ));
+            ),
+          );
       }
     });
   }
