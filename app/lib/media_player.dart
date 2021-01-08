@@ -15,10 +15,10 @@ class MediaPlayer extends StatefulWidget {
 }
 
 class _MediaPlayerState extends State<MediaPlayer> {
-  VideoPlayerController _videoController;
+  VideoPlayerController controller;
 
   void _initVideoPlayer() {
-    _videoController = VideoPlayerController.file(widget.file)
+    controller = VideoPlayerController.file(widget.file)
       ..addListener(() => setState(() {}))
       ..initialize().then((_) => setState(() {}));
   }
@@ -32,21 +32,21 @@ class _MediaPlayerState extends State<MediaPlayer> {
   @override
   void dispose() {
     super.dispose();
-    _videoController?.dispose();
+    controller?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return (_videoController.value.initialized)
+    return (controller.value.initialized)
         ? AspectRatio(
-            aspectRatio: widget.aspectRatio ?? _videoController.value.aspectRatio,
+            aspectRatio: widget.aspectRatio ?? controller.value.aspectRatio,
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
                 Container(color: Colors.black87),
-                VideoPlayer(_videoController),
-                VideoControlsOverlay(controller: _videoController),
-                VideoProgressIndicator(_videoController, allowScrubbing: true),
+                VideoPlayer(controller),
+                VideoControlsOverlay(controller: controller),
+                VideoProgressIndicator(controller, allowScrubbing: true),
               ],
             ),
           )
