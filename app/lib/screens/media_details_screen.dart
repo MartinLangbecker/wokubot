@@ -7,6 +7,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_entry.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wokubot/utils/media_utils.dart';
 
 class MediaDetailsScreen extends StatefulWidget {
@@ -195,7 +196,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Detail View'),
+            title: Text(AppLocalizations.of(context).detailView),
             actions: [
               Builder(builder: (BuildContext context) {
                 return IconButton(

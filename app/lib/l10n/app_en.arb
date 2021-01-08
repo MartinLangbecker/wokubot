@@ -1,0 +1,18 @@
+{
+    "play": "Play",
+    "@play": {
+      "description": "Label for play button or tab"
+    },
+    "record": "Record",
+    "@record": {
+      "description": "Label for record button or tab"
+    },
+    "mediaList": "Media List",
+    "@mediaList": {
+        "description": "Label for media list"
+    },
+    "detailView": "Detail View",
+    "@detailView": {
+        "description": "Label for detail view"
+    }
+}

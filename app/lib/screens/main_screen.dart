@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wokubot/screens/screens.dart';
 
 class MainScreen extends StatefulWidget {
@@ -26,14 +27,14 @@ class _MainScreenState extends State<MainScreen> {
                 Icons.play_arrow,
                 color: Colors.green,
               ),
-              label: 'Play',
+              label: AppLocalizations.of(context).play,
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.circle,
                 color: Colors.red,
               ),
-              label: 'Record',
+              label: AppLocalizations.of(context).record,
             ),
           ],
           onTap: (index) {

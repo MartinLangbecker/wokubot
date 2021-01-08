@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -209,7 +210,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Media List'),
+            title: Text(AppLocalizations.of(context).mediaList),
             actions: [
               Builder(builder: (BuildContext context) {
                 return IconButton(
