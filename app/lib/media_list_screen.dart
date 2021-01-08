@@ -11,6 +11,8 @@ import 'package:wokubot/connection_model.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_details_screen.dart';
 import 'package:wokubot/media_entry.dart';
+import 'package:wokubot/media_list_tile.dart';
+import 'package:wokubot/media_player_overlay.dart';
 import 'package:wokubot/utils/media_utils.dart';
 
 class MediaListScreen extends StatefulWidget {
@@ -168,6 +170,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => MediaDetailsScreen(entry),
+        fullscreenDialog: true,
       ),
     );
 
@@ -181,6 +184,26 @@ class _MediaListScreenState extends State<MediaListScreen> {
     } else {
       return;
     }
+  }
+
+  void _onPreviewPressed(BuildContext context, MediaEntry entry) {
+    // TODO replace with logic for sending media to server
+    if (context.read<ConnectionModel>().isConnected) {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text('Showing ${entry.name} on server ...'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+    } else {
+      _showOverlay(context, entry);
+    }
+  }
+
+  void _showOverlay(BuildContext context, MediaEntry entry) {
+    Navigator.of(context).push(MediaPlayerOverlay(entry));
   }
 
   @override
@@ -241,38 +264,11 @@ class _MediaListScreenState extends State<MediaListScreen> {
                 separatorBuilder: (context, index) => Divider(),
                 itemBuilder: (BuildContext context, int index) {
                   MediaEntry entry = _images[index];
-                  return ListTile(
-                    leading: SizedBox(
-                      height: 120,
-                      child: (entry.file != null) ? Image.file(File(entry.file)) : null,
-                    ),
-                    title: Text(entry.name),
-                    subtitle: Text(
-                      entry.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    isThreeLine: true,
-                    onTap: () => _navigateAndUpdateList(entry),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.play_circle_filled,
-                        color: Colors.green,
-                        size: 50,
-                      ),
-                      onPressed: () {
-                        Scaffold.of(context)
-                          ..removeCurrentSnackBar()
-                          ..showSnackBar(
-                            SnackBar(
-                              content: (context.read<ConnectionModel>().isConnected)
-                                  ? Text('Showing ${entry.name} on server ...')
-                                  : Text('Preview ${entry.name} locally ...'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                      },
-                    ),
+                  return MediaListTile(
+                    navigateAndUpdateList: _navigateAndUpdateList,
+                    entry: entry,
+                    onPreviewPressed: _onPreviewPressed,
+                    context: context,
                   );
                 },
               ),
@@ -281,41 +277,11 @@ class _MediaListScreenState extends State<MediaListScreen> {
                 separatorBuilder: (context, index) => Divider(),
                 itemBuilder: (BuildContext context, int index) {
                   MediaEntry entry = _audio[index];
-                  return ListTile(
-                    leading: SizedBox(
-                      height: 120,
-                      child: Icon(
-                        Icons.audiotrack,
-                        size: 40,
-                      ),
-                    ),
-                    title: Text(entry.name),
-                    subtitle: Text(
-                      entry.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    isThreeLine: true,
-                    onTap: () => _navigateAndUpdateList(entry),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.play_circle_filled,
-                        color: Colors.green,
-                        size: 50,
-                      ),
-                      onPressed: () {
-                        Scaffold.of(context)
-                          ..removeCurrentSnackBar()
-                          ..showSnackBar(
-                            SnackBar(
-                              content: (context.read<ConnectionModel>().isConnected)
-                                  ? Text('Showing ${entry.name} on server ...')
-                                  : Text('Preview ${entry.name} locally ...'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                      },
-                    ),
+                  return MediaListTile(
+                    navigateAndUpdateList: _navigateAndUpdateList,
+                    entry: entry,
+                    onPreviewPressed: _onPreviewPressed,
+                    context: context,
                   );
                 },
               ),
@@ -324,41 +290,11 @@ class _MediaListScreenState extends State<MediaListScreen> {
                 separatorBuilder: (context, index) => Divider(),
                 itemBuilder: (BuildContext context, int index) {
                   MediaEntry entry = _video[index];
-                  return ListTile(
-                    leading: SizedBox(
-                      height: 120,
-                      child: Icon(
-                        Icons.local_movies,
-                        size: 40,
-                      ),
-                    ),
-                    title: Text(entry.name),
-                    subtitle: Text(
-                      entry.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    isThreeLine: true,
-                    onTap: () => _navigateAndUpdateList(entry),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.play_circle_filled,
-                        color: Colors.green,
-                        size: 50,
-                      ),
-                      onPressed: () {
-                        Scaffold.of(context)
-                          ..removeCurrentSnackBar()
-                          ..showSnackBar(
-                            SnackBar(
-                              content: (context.read<ConnectionModel>().isConnected)
-                                  ? Text('Showing ${entry.name} on server ...')
-                                  : Text('Preview ${entry.name} locally ...'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                      },
-                    ),
+                  return MediaListTile(
+                    navigateAndUpdateList: _navigateAndUpdateList,
+                    entry: entry,
+                    onPreviewPressed: _onPreviewPressed,
+                    context: context,
                   );
                 },
               ),
