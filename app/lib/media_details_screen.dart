@@ -7,7 +7,6 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_entry.dart';
-import 'package:wokubot/media_player.dart';
 import 'package:wokubot/utils/media_utils.dart';
 
 class MediaDetailsScreen extends StatefulWidget {
@@ -31,9 +30,9 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   _MediaDetailsScreenState(MediaEntry entry) {
     _nameController = TextEditingController(text: entry.name);
     _descriptionController = TextEditingController(text: entry.description);
-    this.entry = entry.copyWith();
+    _mediaWidget = (entry.file == null) ? Icon(Icons.add, size: 64) : MediaUtils.getMedia(entry);
     _newEntry = entry.id == null;
-    _hasChanged = !_newEntry;
+    _hasChanged = false;
     _isLocked = !_newEntry;
   }
 
@@ -41,7 +40,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     // TODO if changes were made, ask if user wants to save (Yes/No/Discard)
     return (!_isLocked && _hasChanged)
         ? MediaUtils.showYesNoDialog<bool>(
-            context: context,
+            context,
             title: 'Exit without saving?',
             content: 'Do you want to return without saving changes?',
           )
@@ -50,7 +49,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
 
   Future<bool> _onDeletePressed(BuildContext context) {
     return MediaUtils.showYesNoDialog<bool>(
-      context: context,
+      context,
       title: 'Delete entry?',
       content: 'Do you really want to delete this entry from the database?',
     );
@@ -162,30 +161,6 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     // TODO (re)initialize media player
   }
 
-  Widget _getMedia(MediaEntry entry) {
-    switch (entry.type) {
-      case MediaType.IMAGE:
-        return Image.file(File(entry.file));
-        break;
-      case MediaType.AUDIO:
-        return MediaPlayer(
-          file: File(entry.file),
-          aspectRatio: 3 / 1,
-          placeholderAsset: 'assets/images/audio_placeholder.png',
-        );
-        break;
-      case MediaType.VIDEO:
-        return MediaPlayer(
-          file: File(entry.file),
-          aspectRatio: null,
-          placeholderAsset: 'assets/images/video_placeholder.png',
-        );
-        break;
-      default:
-        throw new ErrorDescription('File type ${entry.type} is not supported');
-    }
-  }
-
   @override
   void setState(void Function() func) {
     if (mounted) super.setState(func);
@@ -251,12 +226,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                           alignment: Alignment.bottomCenter,
                           children: [
                             Center(
-                              child: (entry.file != null)
-                                  ? _getMedia(entry)
-                                  : Icon(
-                                      Icons.add,
-                                      size: 64,
-                                    ),
+                              child: _mediaWidget,
                             ),
                             (_isLocked)
                                 ? Container()

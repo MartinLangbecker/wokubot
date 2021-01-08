@@ -12,7 +12,6 @@ import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_details_screen.dart';
 import 'package:wokubot/media_entry.dart';
 import 'package:wokubot/media_list_tile.dart';
-import 'package:wokubot/media_player_overlay.dart';
 import 'package:wokubot/utils/media_utils.dart';
 
 class MediaListScreen extends StatefulWidget {
@@ -145,7 +144,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
   void _deleteAllMedia(BuildContext context) {
     dev.log('Deleting all media from media lists ...', name: 'MediaListScreen');
     MediaUtils.showYesNoDialog<bool>(
-      context: context,
+      context,
       title: 'Delete all media?',
       content: 'Do you REALLY want to delete all media from the database?',
     ).then((deleteConfirmed) {
@@ -198,12 +197,8 @@ class _MediaListScreenState extends State<MediaListScreen> {
           ),
         );
     } else {
-      _showOverlay(context, entry);
+      MediaUtils.showMediaPlayerDialog(context, entry);
     }
-  }
-
-  void _showOverlay(BuildContext context, MediaEntry entry) {
-    Navigator.of(context).push(MediaPlayerOverlay(entry));
   }
 
   @override
