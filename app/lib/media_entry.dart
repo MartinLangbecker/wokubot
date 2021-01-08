@@ -12,7 +12,7 @@ class MediaEntry {
   String file;
   MediaType type;
 
-  MediaEntry([this.id, this.name, this.description, this.file, this.type]);
+  MediaEntry({this.id, this.name, this.description, this.file, this.type});
 
   @override
   String toString() {
@@ -42,11 +42,11 @@ class MediaEntry {
   Map<String, dynamic> toJson() => _$MediaEntryToJson(this);
 
   factory MediaEntry.fromMap(Map<String, dynamic> data) => new MediaEntry(
-        data['id'],
-        data['name'],
-        data['description'],
-        data['file'],
-        MediaType.values.firstWhere((element) => element.toString() == data['type']),
+        id: data['id'],
+        name: data['name'],
+        description: data['description'],
+        file: data['file'],
+        type: MediaType.values.firstWhere((element) => element.toString() == data['type']),
       );
 
   Map<String, dynamic> toMap() {
@@ -76,27 +76,27 @@ class MediaEntry {
     Nullable<MediaType> type,
   }) =>
       MediaEntry(
-        id == null
+        id: id == null
             ? this.id
             : id.value == null
                 ? null
                 : id.value,
-        name == null
+        name: name == null
             ? this.name
             : name.value == null
                 ? null
                 : name.value,
-        description == null
+        description: description == null
             ? this.description
             : description.value == null
                 ? null
                 : description.value,
-        file == null
+        file: file == null
             ? this.file
             : file.value == null
                 ? null
                 : file.value,
-        type == null
+        type: type == null
             ? this.type
             : type.value == null
                 ? null

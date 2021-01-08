@@ -26,9 +26,9 @@ class DatabaseAdapter {
 
     return await openDatabase(
       join(await getDatabasesPath(), _databaseName, _databaseExtension),
-      onCreate: (db, version) {
+      onCreate: (db, version) async {
         dev.log('Creating database $_databaseName ...', name: 'DatabaseAdapter');
-        return db.execute(
+        return await db.execute(
           "CREATE TABLE $_databaseName(id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, name TEXT, description TEXT, file TEXT)",
         );
       },

@@ -8,11 +8,11 @@ part of 'media_entry.dart';
 
 MediaEntry _$MediaEntryFromJson(Map<String, dynamic> json) {
   return MediaEntry(
-    json['id'] as int,
-    json['name'] as String,
-    json['description'] as String,
-    json['file'] as String,
-    _$enumDecodeNullable(_$MediaTypeEnumMap, json['type']),
+    id: json['id'] as int,
+    name: json['name'] as String,
+    description: json['description'] as String,
+    file: json['file'] as String,
+    type: _$enumDecodeNullable(_$MediaTypeEnumMap, json['type']),
   );
 }
 

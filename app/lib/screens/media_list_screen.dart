@@ -26,26 +26,11 @@ class _MediaListScreenState extends State<MediaListScreen> {
   List<MediaEntry> _video = [];
 
   void initState() {
-    _insertInitialEntries();
-    _loadMediaList();
     super.initState();
+    _insertInitialEntries();
   }
 
-  Future _loadMediaList() async {
-    _emptyLists();
-    _reloadMediaLists();
-  }
-
-  void _emptyLists() {
-    dev.log('Emptying media lists ...', name: 'MediaListScreen');
-    setState(() {
-      _images = [];
-      _audio = [];
-      _video = [];
-    });
-  }
-
-  void _insertInitialEntries() async {
+  Future<void> _insertInitialEntries() async {
     dev.log('Inserting initial entries into database ...', name: 'MediaListScreen');
     // TODO add all appropriate entries
     final List<String> initialEntries = [
@@ -60,31 +45,46 @@ class _MediaListScreenState extends State<MediaListScreen> {
     // FIXME getExternalStorageDirectory() will not work on iOS
     // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
     final String path = await getExternalStorageDirectory().then((directory) => directory.path);
-    initialEntries.forEach((element) async {
+    for (var element in initialEntries) {
       final String basename = p.basename(element);
       if (!File('$path/$basename').existsSync()) {
         ByteData data = await rootBundle.load('assets/$element');
         File file = await MediaUtils.writeToFile(data: data, path: '$path/$basename', flush: true);
-        DatabaseAdapter.instance.insertMedia(
+        await DatabaseAdapter.instance.insertMedia(
           new MediaEntry(
-            null,
-            p.basenameWithoutExtension(file.path),
-            p.basenameWithoutExtension(file.path),
-            file.path,
-            MediaUtils.getFileType(file),
+            id: null,
+            name: p.basenameWithoutExtension(file.path),
+            description: p.basenameWithoutExtension(file.path),
+            file: file.path,
+            type: MediaUtils.getFileType(file),
           ),
         );
       }
+    }
+    _loadMediaLists();
+  }
+
+  void _loadMediaLists() {
+    _emptyLists();
+    _loadMediaFromDatabase();
+  }
+
+  void _emptyLists() {
+    dev.log('Emptying media lists ...', name: 'MediaListScreen');
+    setState(() {
+      _images = [];
+      _audio = [];
+      _video = [];
     });
   }
 
-  void _reloadMediaLists() {
-    DatabaseAdapter.instance.getAllMedia().then((media) {
-      dev.log('Reloading media lists ...', name: 'MediaListScreen');
-      media.forEach((entry) {
-        _addToList(entry);
-      });
-    }).catchError((error) => print(error));
+  Future<void> _loadMediaFromDatabase() async {
+    dev.log('Loading media from database ...', name: 'MediaListScreen');
+    List<MediaEntry> media = await DatabaseAdapter.instance.getAllMedia();
+
+    media.forEach((entry) {
+      _addToList(entry);
+    });
   }
 
   void _addToList(MediaEntry entry) {
@@ -164,7 +164,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _navigateAndUpdateList(MediaEntry entry) async {
-    dev.log('Navigating to MediaDetailsScreen for entry ${entry.toString()} ...', name: 'MediaListScreen');
+    dev.log('Navigating to MediaDetailsScreen for ${entry.toString()} ...', name: 'MediaListScreen');
     final MediaEntry result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -186,6 +186,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _onPreviewPressed(BuildContext context, MediaEntry entry) {
+    dev.log('Displaying preview dialog for ${entry.toString()} ...', name: 'MediaListScreen');
     // TODO replace with logic for sending media to server
     if (context.read<ConnectionModel>().isConnected) {
       Scaffold.of(context)
@@ -228,7 +229,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
               Builder(builder: (BuildContext context) {
                 return IconButton(
                   icon: Icon(Icons.refresh),
-                  onPressed: () async => _loadMediaList(),
+                  onPressed: () async => _loadMediaLists(),
                   tooltip: 'Refresh media list',
                 );
               }),
