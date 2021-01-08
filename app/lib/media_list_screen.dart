@@ -71,7 +71,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
             p.basenameWithoutExtension(file.path),
             p.basenameWithoutExtension(file.path),
             file.path,
-            MediaUtils.detectFileType(file),
+            MediaUtils.getFileType(file),
           ),
         );
       }

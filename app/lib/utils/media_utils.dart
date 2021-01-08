@@ -8,7 +8,7 @@ import 'package:wokubot/media_entry.dart';
 import 'package:wokubot/media_player.dart';
 
 class MediaUtils {
-  static MediaType detectFileType(File file) {
+  static MediaType getFileType(File file) {
     final String extension = p.extension(file.path).toLowerCase();
     switch (extension) {
       case '.bmp':

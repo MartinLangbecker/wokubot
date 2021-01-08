@@ -17,10 +17,6 @@ class MediaPlayer extends StatefulWidget {
 class _MediaPlayerState extends State<MediaPlayer> {
   VideoPlayerController _videoController;
 
-  void test(bool smth) {
-    print('test');
-  }
-
   void _initVideoPlayer() {
     _videoController = VideoPlayerController.file(widget.file)
       ..addListener(() => setState(() {}))
@@ -41,7 +37,7 @@ class _MediaPlayerState extends State<MediaPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return _videoController.value.initialized
+    return (_videoController.value.initialized)
         ? AspectRatio(
             aspectRatio: widget.aspectRatio ?? _videoController.value.aspectRatio,
             child: Stack(

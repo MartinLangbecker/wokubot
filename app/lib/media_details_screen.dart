@@ -86,7 +86,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
 
     setState(() {
       _entry.file = file.path;
-      _entry.type = MediaUtils.detectFileType(file);
+      _entry.type = MediaUtils.getFileType(file);
       _savedEntry.file = _entry.file;
       _savedEntry.type = _entry.type;
       _savedEntry.name = _entry.name;
@@ -162,13 +162,13 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     if (result != null) {
       setState(() {
         _entry.file = result.files.first.path;
-        _entry.type = MediaUtils.detectFileType(File(result.files.first.path));
+        _entry.type = MediaUtils.getFileType(File(result.files.first.path));
         _mediaWidget = MediaUtils.getMedia(_entry);
         _hasChanged = true;
       });
     }
 
-    // TODO (re)initialize media player
+    // TODO (re)initialize media player to change media data
   }
 
   @override
