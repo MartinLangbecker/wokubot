@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wokubot/media_list_screen.dart';
-import 'package:wokubot/recording_screen.dart';
+import 'package:wokubot/screens/screens.dart';
 
 class MainScreen extends StatefulWidget {
   @override

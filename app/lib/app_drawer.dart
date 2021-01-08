@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wokubot/connection_model.dart';
-import 'package:wokubot/login_screen.dart';
-import 'package:wokubot/logout_screen.dart';
-import 'package:wokubot/settings_screen.dart';
+import 'package:wokubot/models/connection_model.dart';
+import 'package:wokubot/screens/screens.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
