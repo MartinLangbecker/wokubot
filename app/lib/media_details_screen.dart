@@ -22,7 +22,9 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController;
   TextEditingController _descriptionController;
-  MediaEntry entry;
+  Widget _mediaWidget;
+  MediaEntry _entry;
+  MediaEntry _savedEntry;
   bool _newEntry;
   bool _hasChanged;
   bool _isLocked;
@@ -31,6 +33,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     _nameController = TextEditingController(text: entry.name);
     _descriptionController = TextEditingController(text: entry.description);
     _mediaWidget = (entry.file == null) ? Icon(Icons.add, size: 64) : MediaUtils.getMedia(entry);
+    this._entry = entry.copyWith();
+    this._savedEntry = entry.copyWith();
     _newEntry = entry.id == null;
     _hasChanged = false;
     _isLocked = !_newEntry;
@@ -61,19 +65,18 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
     _formKey.currentState.save();
 
-    if (entry.file == null) entry.file = 'assets/images/placeholder.png';
+    if (_entry.file == null) _entry.file = 'assets/images/placeholder.png';
 
     // FIXME getExternalStorageDirectory() will not work on iOS
     // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
     final String path = await getExternalStorageDirectory().then((directory) => directory.path);
-    final String basename = p.basename(entry.file);
+    final String basename = p.basename(_entry.file);
     File file;
 
     if (!File('$path/$basename').existsSync()) {
-      // TODO improve caching (?)
       bool fromAsset = (basename == 'placeholder.png');
       file = await _copyFile(
-        filePath: entry.file,
+        filePath: _entry.file,
         newPath: '$path/$basename',
         fromAsset: fromAsset,
       );
@@ -82,30 +85,35 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
 
     setState(() {
-      entry.file = file.path;
-      entry.type = MediaUtils.detectFileType(file);
+      _entry.file = file.path;
+      _entry.type = MediaUtils.detectFileType(file);
+      _savedEntry.file = _entry.file;
+      _savedEntry.type = _entry.type;
+      _savedEntry.name = _entry.name;
+      _savedEntry.description = _entry.description;
       _hasChanged = false;
     });
 
     if (_newEntry) {
-      DatabaseAdapter.instance.insertMedia(entry).then((id) {
+      DatabaseAdapter.instance.insertMedia(_entry).then((id) {
         setState(() {
-          entry.id = id;
+          _entry.id = id;
+          _savedEntry.id = id;
           _newEntry = false;
         });
       });
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content: Text('Entry ${entry.name} saved in database'),
+          content: Text('Entry ${_entry.name} saved in database'),
           duration: Duration(seconds: 2),
         ));
     } else {
-      DatabaseAdapter.instance.updateMedia(entry);
+      DatabaseAdapter.instance.updateMedia(_entry);
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content: Text('Entry ${entry.name} updated in database'),
+          content: Text('Entry ${_entry.name} updated in database'),
           duration: Duration(seconds: 2),
         ));
     }
@@ -126,11 +134,12 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   void _deleteEntry(BuildContext context) {
     _onDeletePressed(context).then((deletionConfirmed) {
       if (deletionConfirmed) {
-        DatabaseAdapter.instance.deleteMedia(entry.id);
+        DatabaseAdapter.instance.deleteMedia(_entry.id);
         setState(() {
           _nameController.clear();
           _descriptionController.clear();
-          entry = new MediaEntry();
+          _entry = new MediaEntry();
+          _savedEntry = new MediaEntry();
           _newEntry = true;
           _hasChanged = false;
           _isLocked = false;
@@ -152,8 +161,9 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
 
     if (result != null) {
       setState(() {
-        entry.file = result.files.first.path;
-        entry.type = MediaUtils.detectFileType(File(result.files.first.path));
+        _entry.file = result.files.first.path;
+        _entry.type = MediaUtils.detectFileType(File(result.files.first.path));
+        _mediaWidget = MediaUtils.getMedia(_entry);
         _hasChanged = true;
       });
     }
@@ -178,7 +188,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     return WillPopScope(
       onWillPop: () => _onBackPressed(context).then((willPop) {
         if (willPop) {
-          Navigator.pop(context, entry);
+          Navigator.pop(context, _savedEntry);
         }
         return Future<bool>.value(false);
       }),
@@ -263,8 +273,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                     textInputAction: TextInputAction.next,
                     style: TextStyle(color: Colors.black87, fontSize: 20),
                     enabled: !_isLocked,
-                    onSaved: (name) => setState(() => entry.name = name),
-                    onChanged: (text) => setState(() => _hasChanged = (text != entry.name)),
+                    onSaved: (name) => setState(() => _entry.name = name),
+                    onChanged: (text) => setState(() => _hasChanged = (text != _entry.name)),
                   ),
                 ),
                 Padding(
@@ -281,8 +291,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black87, fontSize: 20),
                     enabled: !_isLocked,
-                    onSaved: (description) => setState(() => entry.description = description),
-                    onChanged: (text) => setState(() => _hasChanged = (text != entry.name)),
+                    onSaved: (description) => setState(() => _entry.description = description),
+                    onChanged: (text) => setState(() => _hasChanged = (text != _entry.name)),
                     minLines: 1,
                     maxLines: 5,
                   ),
