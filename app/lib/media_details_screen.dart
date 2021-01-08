@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:video_player/video_player.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_entry.dart';
+import 'package:wokubot/media_player.dart';
 import 'package:wokubot/utils/media_utils.dart';
-import 'package:wokubot/utils/video_controls_overlay.dart';
 
 class MediaDetailsScreen extends StatefulWidget {
   final MediaEntry entry;
@@ -24,7 +23,6 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController;
   TextEditingController _descriptionController;
-  VideoPlayerController _videoController;
   MediaEntry entry;
   bool _newEntry;
   bool _hasChanged;
@@ -142,8 +140,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
           ..removeCurrentSnackBar()
           ..showSnackBar(
             SnackBar(
-            content: Text('Entry deleted from database'),
-            duration: Duration(seconds: 2),
+              content: Text('Entry deleted from database'),
+              duration: Duration(seconds: 2),
             ),
           );
       }
@@ -159,9 +157,9 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
         entry.type = MediaUtils.detectFileType(File(result.files.first.path));
         _hasChanged = true;
       });
-
-      if (entry.type != MediaType.IMAGE) _initVideoPlayer();
     }
+
+    // TODO (re)initialize media player
   }
 
   Widget _getMedia(MediaEntry entry) {
@@ -170,52 +168,22 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
         return Image.file(File(entry.file));
         break;
       case MediaType.AUDIO:
-        return _videoController.value.initialized
-            ? AspectRatio(
-                aspectRatio: 3 / 1,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Container(color: Colors.black87),
-                    VideoPlayer(_videoController),
-                    VideoControlsOverlay(controller: _videoController),
-                    VideoProgressIndicator(_videoController, allowScrubbing: true),
-                  ],
-                ),
-              )
-            : Image.asset('assets/images/audio_placeholder.png');
+        return MediaPlayer(
+          file: File(entry.file),
+          aspectRatio: 3 / 1,
+          placeholderAsset: 'assets/images/audio_placeholder.png',
+        );
         break;
       case MediaType.VIDEO:
-        return _videoController.value.initialized
-            ? AspectRatio(
-                aspectRatio: _videoController.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Container(color: Colors.black87),
-                    VideoPlayer(_videoController),
-                    VideoControlsOverlay(controller: _videoController),
-                    VideoProgressIndicator(_videoController, allowScrubbing: true),
-                  ],
-                ),
-              )
-            : Image.asset('assets/images/video_placeholder.png');
+        return MediaPlayer(
+          file: File(entry.file),
+          aspectRatio: null,
+          placeholderAsset: 'assets/images/video_placeholder.png',
+        );
         break;
       default:
         throw new ErrorDescription('File type ${entry.type} is not supported');
     }
-  }
-
-  void _initVideoPlayer() {
-    _videoController = VideoPlayerController.file(File(entry.file))
-      ..addListener(() => setState(() {}))
-      ..initialize().then((_) => setState(() {}));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (entry.type == MediaType.AUDIO || entry.type == MediaType.VIDEO) _initVideoPlayer();
   }
 
   @override
@@ -228,7 +196,6 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     super.dispose();
     _nameController.dispose();
     _descriptionController.dispose();
-    _videoController?.dispose();
   }
 
   @override
