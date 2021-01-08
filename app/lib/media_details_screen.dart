@@ -35,7 +35,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     _descriptionController = TextEditingController(text: entry.description);
     this.entry = entry.copyWith();
     _newEntry = entry.id == null;
-    _hasChanged = _newEntry;
+    _hasChanged = !_newEntry;
     _isLocked = !_newEntry;
   }
 
@@ -135,7 +135,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
           _descriptionController.clear();
           entry = new MediaEntry();
           _newEntry = true;
-          _hasChanged = true;
+          _hasChanged = false;
           _isLocked = false;
         });
         Scaffold.of(context)
