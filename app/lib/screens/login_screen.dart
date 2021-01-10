@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:wokubot/models/connection_model.dart';
 
 class LoginScreen extends StatefulWidget {
+  final BuildContext context;
+
+  const LoginScreen({Key key, this.context}) : super(key: key);
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState(context);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _addressController = TextEditingController(text: '192.168.0.1');
-  final _addressValidator = MultiValidator([
-    PatternValidator(
-        r'\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\b',
-        errorText: 'Please enter a valid IP address.'),
-    RequiredValidator(errorText: 'Please enter a valid IP address.'),
-  ]);
+  final String _addressPattern =
+      r'\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\b';
+  MultiValidator _addressValidator;
   String address = '';
+
+  _LoginScreenState(BuildContext context) {
+    _addressValidator = MultiValidator([
+      PatternValidator(_addressPattern, errorText: AppLocalizations.of(context).loginScreenAddressValidatorError),
+      RequiredValidator(errorText: AppLocalizations.of(context).loginScreenAddressValidatorError),
+    ]);
+  }
 
   void _handleConnect(BuildContext context) {
     if (!_formKey.currentState.validate()) {
@@ -34,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content: Text('Error connecting to server'),
+          content: Text(AppLocalizations.of(context).loginScreenConnectionError),
           duration: Duration(seconds: 2),
         ));
     }
@@ -56,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Connect to server'),
+          title: Text(AppLocalizations.of(context).loginScreenAppBar),
         ),
         body: Center(
           child: Form(
@@ -80,8 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: RichText(
                     textAlign: TextAlign.justify,
                     text: TextSpan(
-                      text:
-                          'In a later version, you will need to enter the server IP in the input field below. For now, just press "Connect".\n\nAnd thanks for testing my app! :)',
+                      text: AppLocalizations.of(context).loginScreenDescription,
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                     ),
                   ),
@@ -92,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return TextFormField(
                       controller: _addressController,
                       decoration: InputDecoration(
-                        hintText: 'Server IP (e. g. 192.168.0.1)',
+                        hintText: AppLocalizations.of(context).loginScreenAddressHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),
@@ -112,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Builder(builder: (BuildContext context) {
                       return RaisedButton(
                         child: Text(
-                          'Connect',
+                          AppLocalizations.of(context).connect,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,

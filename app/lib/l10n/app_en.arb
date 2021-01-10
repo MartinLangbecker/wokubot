@@ -1,18 +1,58 @@
 {
-    "play": "Play",
-    "@play": {
-      "description": "Label for play button or tab"
-    },
-    "record": "Record",
-    "@record": {
-      "description": "Label for record button or tab"
-    },
-    "mediaList": "Media List",
-    "@mediaList": {
-        "description": "Label for media list"
-    },
-    "detailView": "Detail View",
-    "@detailView": {
-        "description": "Label for detail view"
-    }
+  "connect": "Connect",
+  "@connect": {
+    "description": "Connect"
+  },
+  "detailView": "Detail View",
+  "@detailView": {
+    "description": "Label for detail view"
+  },
+  "disconnect": "Disconnect",
+  "@disconnect": {
+    "description": "Disconnect"
+  },
+  "loginScreenAddressHint": "Server IP (e. g. 192.168.0.1)",
+  "@loginScreenAddressHint": {
+    "description": "Hint for server address input field on login screen"
+  },
+  "loginScreenAddressValidatorError": "Please enter a valid IP address.",
+  "@loginScreenAddressValidatorError": {
+    "description": "Error message when invalid IP is entered on login screen"
+  },
+  "loginScreenAppBar": "Connect to server",
+  "@loginScreenAppBar": {
+    "description": "Connect to server"
+  },
+  "loginScreenConnectionError": "Error connecting to server",
+  "@loginScreenConnectionError": {
+    "description": "Error message when error during connection to server"
+  },
+  "loginScreenDescription": "In a later version, you will need to enter the server IP in the input field below. For now, just press \"Connect\".\n\nAnd thanks for testing my app! :)",
+  "@loginScreenDescription": {
+    "description": "Descriptive text on login screen"
+  },
+  "logoutScreenAppBar": "Disconnect from server",
+  "@logoutScreenAppBar": {
+    "description": "Disconnect from server"
+  },
+  "logoutScreenDescription": "In a later version, pressing the button below will disconnect you from the server.\nFor now, pressing \"Disconnect\" has no effect.",
+  "@logoutScreenDescription": {
+    "description": "Descriptive text on logout screen"
+  },
+  "mediaList": "Media List",
+  "@mediaList": {
+    "description": "Label for media list"
+  },
+  "play": "Play",
+  "@play": {
+    "description": "Label for play button or tab"
+  },
+  "record": "Record",
+  "@record": {
+    "description": "Label for record button or tab"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings"
+  }
 }

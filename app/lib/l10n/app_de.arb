@@ -1,6 +1,16 @@
 {
+    "connect": "Verbinden",
+    "detailView": "Detailansicht",
+    "disconnect": "Verbindung trennen",
+    "loginScreenAddressHint": "Server IP (z.B. 192.168.0.1)",
+    "loginScreenAddressValidatorError": "Bitte geben Sie eine gültige IP-Adresse ein.",
+    "loginScreenAppBar": "Verbindung zum Server herstellen",
+    "loginScreenConnectionError": "Fehler bei Verbindung zum Server",
+    "loginScreenDescription": "In  einer späteren Version muss die IP-Adresse des Servers ins nachfolgende Eingabefeld eingegeben werden. Bis dahin drücke einfach auf \"Verbinden\".\n\nUnd danke, dass du meine App testest! :)",
+    "logoutScreenAppBar": "Verbindung zum Server trennen",
+    "logoutScreenDescription": "In einer späteren Version wird das Antippen des Buttons dazu führen, dass die bestehende Verbindung zum Server getrennt wird.\nBis dahin hat ein Druck auf \"Verbindung trennen\" keinen Effekt.",
+    "mediaList": "Medienliste",
     "play": "Abspielen",
     "record": "Aufnehmen",
-    "mediaList": "Medienliste",
-    "detailView": "Detailansicht"
+    "settings": "Einstellungen"
 }

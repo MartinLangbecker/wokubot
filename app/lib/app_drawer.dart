@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wokubot/models/connection_model.dart';
 import 'package:wokubot/screens/screens.dart';
@@ -18,22 +19,23 @@ class _AppDrawerState extends State<AppDrawer> {
           Consumer<ConnectionModel>(
             builder: (_, connection, __) {
               return (!connection.isConnected)
+                  // TODO unify login and logout screens
                   ? ListTile(
                       leading: Icon(Icons.login),
-                      title: Text('Connect'),
+                      title: Text(AppLocalizations.of(context).connect),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => LoginScreen(),
+                            builder: (_) => LoginScreen(context: context),
                           ),
                         );
                       },
                     )
                   : ListTile(
                       leading: Icon(Icons.logout),
-                      title: Text('Disconnect'),
+                      title: Text(AppLocalizations.of(context).disconnect),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -52,7 +54,7 @@ class _AppDrawerState extends State<AppDrawer> {
               alignment: Alignment.bottomLeft,
               child: ListTile(
                 leading: Icon(Icons.settings),
-                title: Text('Settings'),
+                title: Text(AppLocalizations.of(context).settings),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));

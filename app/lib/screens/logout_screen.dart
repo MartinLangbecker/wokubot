@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wokubot/models/connection_model.dart';
 
@@ -20,7 +21,7 @@ class LogoutScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Disconnect from server'),
+          title: Text(AppLocalizations.of(context).logoutScreenAppBar),
         ),
         body: Center(
           child: Form(
@@ -43,8 +44,7 @@ class LogoutScreen extends StatelessWidget {
                   child: RichText(
                     textAlign: TextAlign.justify,
                     text: TextSpan(
-                      text:
-                          'In a later version, pressing the button below will disconnect you from the server.\nFor now, pressing "Disconnect" has no effect.',
+                      text: AppLocalizations.of(context).logoutScreenDescription,
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                     ),
                   ),
@@ -55,7 +55,7 @@ class LogoutScreen extends StatelessWidget {
                     height: 56,
                     child: RaisedButton(
                       child: Text(
-                        'Disconnect',
+                        AppLocalizations.of(context).disconnect,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
