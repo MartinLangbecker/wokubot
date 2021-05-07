@@ -12,26 +12,24 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: ^0.16.1
-  cupertino_icons: ^1.0.0
-  form_field_validator: ^1.0.1
-  provider: ^4.0.1
-  sqflite:
-  path:
-  path_provider:
-  image_picker:
-  file_picker:
-  video_player:
+  file_picker: ^3.0.1
+  form_field_validator: ^1.1.0
+  image_picker: ^0.7.4
+  intl: ^0.17.0
+  path: ^1.8.0
+  path_provider: ^2.0.1
+  provider: ^5.0.0
+  sqflite: ^2.0.0+3
+  video_player: ^2.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner:
-  json_serializable:
+  build_runner: ^2.0.2
+  json_serializable: ^4.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
   generate: true
