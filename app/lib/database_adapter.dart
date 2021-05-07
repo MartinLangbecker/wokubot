@@ -53,38 +53,6 @@ class DatabaseAdapter {
     });
   }
 
-  // TODO: remove hint once method is used
-  // ignore: unused_element
-  Future<List<MediaEntry>> getMediaByType(MediaType type) async {
-    dev.log('Getting media by type ${type.toString()} from database $_databaseName ...', name: 'DatabaseAdapter');
-    final Database db = await database;
-    final List<Map<String, dynamic>> media = await db.query(
-      _databaseName,
-      where: "type = ?",
-      whereArgs: [type.toString()],
-    );
-
-    return List<MediaEntry>.generate(media.length, (i) {
-      return MediaEntry.fromMap(media[i]);
-    });
-  }
-
-  // TODO: remove hint once method is used
-  // ignore: unused_element
-  Future<MediaEntry> getMediaById(int id) async {
-    dev.log('Getting media with id $id from database $_databaseName ...', name: 'DatabaseAdapter');
-    final Database db = await database;
-    final List<Map<String, dynamic>> media = await db.query(
-      _databaseName,
-      where: "id = ?",
-      whereArgs: [id],
-    );
-
-    return List<MediaEntry>.generate(media.length, (i) {
-      return MediaEntry.fromMap(media[i]);
-    }).single;
-  }
-
   Future<void> updateMedia(MediaEntry entry) async {
     dev.log('Updating ${entry.toString()} in database $_databaseName ...', name: 'DatabaseAdapter');
     final Database db = await database;
