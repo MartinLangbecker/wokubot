@@ -46,7 +46,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   Future<bool> _onBackPressed(BuildContext context) {
     // TODO #39 if changes were made, ask if user wants to save (Yes/No/Discard)
     return (!_isLocked && _hasChanged)
-        ? MediaUtils.showYesNoDialog<bool>(
+        ? MediaUtils.showYesNoDialog(
             context,
             title: 'Exit without saving?',
             content: 'Do you want to return without saving changes?',
@@ -54,8 +54,13 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
         : Future<bool>.value(true);
   }
 
+  void _onLockPressed(BuildContext context) {
+    setState(() => _isLocked = !_isLocked);
+    if (_isLocked) _saveEntry(context);
+  }
+
   Future<bool> _onDeletePressed(BuildContext context) {
-    return MediaUtils.showYesNoDialog<bool>(
+    return MediaUtils.showYesNoDialog(
       context,
       title: 'Delete entry?',
       content: 'Do you really want to delete this entry from the database?',
@@ -106,7 +111,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
           _newEntry = false;
         });
       });
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
           content: Text('Entry ${_entry.name} saved in database'),
@@ -114,7 +119,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
         ));
     } else {
       DatabaseAdapter.instance.updateMedia(_entry);
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
           content: Text('Entry ${_entry.name} updated in database'),
@@ -151,7 +156,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
           _hasChanged = false;
           _isLocked = false;
         });
-        Scaffold.of(context)
+        ScaffoldMessenger.of(context)
           ..removeCurrentSnackBar()
           ..showSnackBar(
             SnackBar(
@@ -208,14 +213,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
               Builder(builder: (BuildContext context) {
                 return IconButton(
                   icon: (_isLocked) ? Icon(Icons.edit) : Icon(Icons.save_alt),
-                  onPressed: () {
-                    setState(() {
-                      _isLocked = !_isLocked;
-                    });
-                    if (_isLocked) {
-                      _saveEntry(context);
-                    }
-                  },
+                  onPressed: () => _onLockPressed(context),
                   tooltip: 'Edit media entry',
                 );
               }),

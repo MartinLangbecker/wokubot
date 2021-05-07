@@ -156,7 +156,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
 
   void _deleteAllMedia(BuildContext context) {
     dev.log('Deleting all media from media lists ...', name: 'MediaListScreen');
-    MediaUtils.showYesNoDialog<bool>(
+    MediaUtils.showYesNoDialog(
       context,
       title: 'Delete all media?',
       content: 'Do you REALLY want to delete all media from the database?',
@@ -164,7 +164,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
       if (deleteConfirmed) {
         DatabaseAdapter.instance.deleteAllMedia();
         _emptyLists();
-        Scaffold.of(context)
+        ScaffoldMessenger.of(context)
           ..removeCurrentSnackBar()
           ..showSnackBar(
             SnackBar(
@@ -208,7 +208,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
     );
     // TODO #36 replace with logic for sending media to server
     if (context.read<ConnectionModel>().isConnected) {
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(
           SnackBar(

@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
       context.read<ConnectionModel>().setConnectionState(true);
       Navigator.pop(context);
     } else {
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
           content:
@@ -123,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ButtonTheme(
                     height: 56,
                     child: Builder(builder: (BuildContext context) {
-                      return RaisedButton(
+                      return ElevatedButton(
                         child: Text(
                           AppLocalizations.of(context).connect,
                           style: TextStyle(
@@ -131,9 +131,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 20,
                           ),
                         ),
-                        color: Colors.black87,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.black87,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
                         ),
                         onPressed: () => _handleConnect(context),
                       );

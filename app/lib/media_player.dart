@@ -9,7 +9,9 @@ class MediaPlayer extends StatefulWidget {
   final String placeholderAsset;
   final double aspectRatio;
 
-  const MediaPlayer({Key key, this.file, this.placeholderAsset, this.aspectRatio}) : super(key: key);
+  const MediaPlayer(
+      {Key key, this.file, this.placeholderAsset, this.aspectRatio})
+      : super(key: key);
   @override
   _MediaPlayerState createState() => _MediaPlayerState();
 }
@@ -37,7 +39,7 @@ class _MediaPlayerState extends State<MediaPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return (controller.value.initialized)
+    return (controller.value.isInitialized)
         ? AspectRatio(
             aspectRatio: widget.aspectRatio ?? controller.value.aspectRatio,
             child: Stack(

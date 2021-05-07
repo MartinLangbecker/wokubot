@@ -54,7 +54,7 @@ class LogoutScreen extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 5),
                   child: ButtonTheme(
                     height: 56,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       child: Text(
                         AppLocalizations.of(context).disconnect,
                         style: TextStyle(
@@ -62,9 +62,11 @@ class LogoutScreen extends StatelessWidget {
                           fontSize: 20,
                         ),
                       ),
-                      color: Colors.black87,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black87,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                       ),
                       onPressed: () => _handleDisconnect(context),
                     ),

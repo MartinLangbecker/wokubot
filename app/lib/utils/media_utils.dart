@@ -77,20 +77,46 @@ class MediaUtils {
     return new File(path).writeAsBytes(bytes, flush: flush);
   }
 
-  static Future<T> showYesNoDialog<T>(BuildContext context, {String title, String content}) {
+  static Future<bool> showYesNoDialog(BuildContext context,
+      {String title, String content}) {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text(title),
         content: new Text(content),
         actions: <Widget>[
-          new FlatButton(
+          new TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(AppLocalizations.of(context).yes),
+          ),
+          new TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text(AppLocalizations.of(context).no),
           ),
-          new FlatButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text("Yes"),
+        ],
+      ),
+    );
+  }
+
+  static Future<String> showYesNoCancelDialog(BuildContext context,
+      {String title, String content}) {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text(title),
+        content: new Text(content),
+        actions: <Widget>[
+          new TextButton(
+            onPressed: () => Navigator.pop(context, 'yes'),
+            child: Text(AppLocalizations.of(context).yes),
+          ),
+          new TextButton(
+            onPressed: () => Navigator.pop(context, 'no'),
+            child: Text(AppLocalizations.of(context).no),
+          ),
+          new TextButton(
+            onPressed: () => Navigator.pop(context, 'cancel'),
+            child: Text(AppLocalizations.of(context).cancel),
           ),
         ],
       ),
@@ -119,13 +145,15 @@ class MediaUtils {
               Expanded(
                 flex: 1,
                 child: SizedBox.expand(
-                  child: RaisedButton(
-                    color: Colors.blue,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      onPrimary: Colors.white,
+                    ),
                     child: Text(
                       AppLocalizations.of(context).close,
                       style: TextStyle(fontSize: 20),
                     ),
-                    textColor: Colors.white,
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
