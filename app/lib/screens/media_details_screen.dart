@@ -42,7 +42,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   }
 
   Future<bool> _onBackPressed(BuildContext context) {
-    // TODO if changes were made, ask if user wants to save (Yes/No/Discard)
+    // TODO #39 if changes were made, ask if user wants to save (Yes/No/Discard)
     return (!_isLocked && _hasChanged)
         ? MediaUtils.showYesNoDialog<bool>(
             context,
@@ -169,7 +169,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
       });
     }
 
-    // TODO (re)initialize media player to change media data
+    // TODO #31 (re)initialize media player to change media data
   }
 
   @override

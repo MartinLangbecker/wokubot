@@ -19,7 +19,7 @@ class _AppDrawerState extends State<AppDrawer> {
           Consumer<ConnectionModel>(
             builder: (_, connection, __) {
               return (!connection.isConnected)
-                  // TODO unify login and logout screens
+                  // TODO #38 unify login and logout screens
                   ? ListTile(
                       leading: Icon(Icons.login),
                       title: Text(AppLocalizations.of(context).connect),

@@ -21,7 +21,7 @@ class MediaListScreen extends StatefulWidget {
 }
 
 class _MediaListScreenState extends State<MediaListScreen> {
-  // TODO refactor: unite into single list and/or create model
+  // TODO #28 refactor: unite into single list and/or create model
   List<MediaEntry> _images = [];
   List<MediaEntry> _audio = [];
   List<MediaEntry> _video = [];
@@ -32,8 +32,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   Future<void> _insertInitialEntries() async {
-    dev.log('Inserting initial entries into database ...', name: 'MediaListScreen');
-    // TODO add all appropriate entries
+    // TODO #40 add all appropriate entries
     final List<String> initialEntries = [
       'images/wokubot_hearts.png',
       'images/wokubot_main.jpg',
@@ -187,8 +186,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _onPreviewPressed(BuildContext context, MediaEntry entry) {
-    dev.log('Displaying preview dialog for ${entry.toString()} ...', name: 'MediaListScreen');
-    // TODO replace with logic for sending media to server
+    // TODO #36 replace with logic for sending media to server
     if (context.read<ConnectionModel>().isConnected) {
       Scaffold.of(context)
         ..removeCurrentSnackBar()
@@ -255,7 +253,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
           drawer: AppDrawer(),
           body: TabBarView(
             children: [
-              // TODO refactor: extract into widget MediaList(List<MediaType>, ...) and/or MediaListModel with ChangeNotifier
+              // TODO #28 refactor: extract into widget MediaList(List<MediaType>, ...) and/or MediaListModel with ChangeNotifier
               ListView.separated(
                 itemCount: _images.length,
                 separatorBuilder: (context, index) => Divider(),

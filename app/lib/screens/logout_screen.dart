@@ -12,7 +12,7 @@ class LogoutScreen extends StatelessWidget {
   }
 
   bool _disconnectFromServer() {
-    // TODO implement
+    // TODO #34 implement
     return true;
   }
 
