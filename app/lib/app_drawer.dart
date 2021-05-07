@@ -57,7 +57,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 title: Text(AppLocalizations.of(context).settings),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsScreen()),
+                  );
                 },
               ),
             ),

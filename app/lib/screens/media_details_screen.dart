@@ -33,7 +33,9 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   _MediaDetailsScreenState(MediaEntry entry) {
     _nameController = TextEditingController(text: entry.name);
     _descriptionController = TextEditingController(text: entry.description);
-    _mediaWidget = (entry.file == null) ? Icon(Icons.add, size: 64) : MediaUtils.getMedia(entry);
+    _mediaWidget = (entry.file == null)
+        ? Icon(Icons.add, size: 64)
+        : MediaUtils.getMedia(entry);
     this._entry = entry.copyWith();
     this._savedEntry = entry.copyWith();
     _newEntry = entry.id == null;
@@ -70,7 +72,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
 
     // FIXME getExternalStorageDirectory() will not work on iOS
     // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
-    final String path = await getExternalStorageDirectory().then((directory) => directory.path);
+    final String path =
+        await getExternalStorageDirectory().then((directory) => directory.path);
     final String basename = p.basename(_entry.file);
     File file;
 
@@ -120,7 +123,10 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
   }
 
-  Future<File> _copyFile({@required String filePath, @required String newPath, fromAsset = false}) async {
+  Future<File> _copyFile(
+      {@required String filePath,
+      @required String newPath,
+      fromAsset = false}) async {
     Future<File> file;
     if (fromAsset) {
       ByteData data = await rootBundle.load(filePath);
@@ -158,7 +164,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   }
 
   void _pickFile() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles(allowCompression: true);
+    FilePickerResult result =
+        await FilePicker.platform.pickFiles(allowCompression: true);
 
     if (result != null) {
       setState(() {
@@ -265,7 +272,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                   child: TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(
-                      hintText: 'Name',
+                      hintText: AppLocalizations.of(context).name,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),
@@ -275,7 +282,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                     style: TextStyle(color: Colors.black87, fontSize: 20),
                     enabled: !_isLocked,
                     onSaved: (name) => setState(() => _entry.name = name),
-                    onChanged: (text) => setState(() => _hasChanged = (text != _entry.name)),
+                    onChanged: (text) =>
+                        setState(() => _hasChanged = (text != _entry.name)),
                   ),
                 ),
                 Padding(
@@ -283,7 +291,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                   child: TextFormField(
                     controller: _descriptionController,
                     decoration: InputDecoration(
-                      hintText: 'Description',
+                      hintText: AppLocalizations.of(context).description,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),
@@ -292,8 +300,10 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black87, fontSize: 20),
                     enabled: !_isLocked,
-                    onSaved: (description) => setState(() => _entry.description = description),
-                    onChanged: (text) => setState(() => _hasChanged = (text != _entry.name)),
+                    onSaved: (description) =>
+                        setState(() => _entry.description = description),
+                    onChanged: (text) =>
+                        setState(() => _hasChanged = (text != _entry.name)),
                     minLines: 1,
                     maxLines: 5,
                   ),

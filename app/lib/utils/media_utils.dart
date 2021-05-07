@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:wokubot/media_entry.dart';
 import 'package:wokubot/media_player.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MediaUtils {
   static MediaType getFileType(File file) {
@@ -63,9 +64,16 @@ class MediaUtils {
     }
   }
 
-  static Future<File> writeToFile({ByteData data, String path, bool flush = false}) {
+  static Future<File> writeToFile({
+    ByteData data,
+    String path,
+    bool flush = false,
+  }) {
     final ByteBuffer buffer = data.buffer;
-    List<int> bytes = buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    List<int> bytes = buffer.asUint8List(
+      data.offsetInBytes,
+      data.lengthInBytes,
+    );
     return new File(path).writeAsBytes(bytes, flush: flush);
   }
 
@@ -78,7 +86,7 @@ class MediaUtils {
         actions: <Widget>[
           new FlatButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text("No"),
+            child: Text(AppLocalizations.of(context).no),
           ),
           new FlatButton(
             onPressed: () => Navigator.pop(context, true),
@@ -114,7 +122,7 @@ class MediaUtils {
                   child: RaisedButton(
                     color: Colors.blue,
                     child: Text(
-                      'Close',
+                      AppLocalizations.of(context).close,
                       style: TextStyle(fontSize: 20),
                     ),
                     textColor: Colors.white,

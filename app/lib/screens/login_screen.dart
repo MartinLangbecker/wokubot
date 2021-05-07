@@ -22,8 +22,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _LoginScreenState(BuildContext context) {
     _addressValidator = MultiValidator([
-      PatternValidator(_addressPattern, errorText: AppLocalizations.of(context).loginScreenAddressValidatorError),
-      RequiredValidator(errorText: AppLocalizations.of(context).loginScreenAddressValidatorError),
+      PatternValidator(_addressPattern,
+          errorText:
+              AppLocalizations.of(context).loginScreenAddressValidatorError),
+      RequiredValidator(
+          errorText:
+              AppLocalizations.of(context).loginScreenAddressValidatorError),
     ]);
   }
 
@@ -42,7 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(context).loginScreenConnectionError),
+          content:
+              Text(AppLocalizations.of(context).loginScreenConnectionError),
           duration: Duration(seconds: 2),
         ));
     }
@@ -99,7 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     return TextFormField(
                       controller: _addressController,
                       decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context).loginScreenAddressHint,
+                        hintText:
+                            AppLocalizations.of(context).loginScreenAddressHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),

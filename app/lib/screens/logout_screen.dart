@@ -44,7 +44,8 @@ class LogoutScreen extends StatelessWidget {
                   child: RichText(
                     textAlign: TextAlign.justify,
                     text: TextSpan(
-                      text: AppLocalizations.of(context).logoutScreenDescription,
+                      text:
+                          AppLocalizations.of(context).logoutScreenDescription,
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                     ),
                   ),

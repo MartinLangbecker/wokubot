@@ -1,7 +1,23 @@
 {
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close"
+  },
+  "comingSoon": "Coming soon!™",
+  "@comingSoon": {
+    "description": "This feature will be available in an upcoming version."
+  },
   "connect": "Connect",
   "@connect": {
     "description": "Connect"
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Description"
   },
   "detailView": "Detail View",
   "@detailView": {
@@ -43,6 +59,14 @@
   "@mediaList": {
     "description": "Label for media list"
   },
+  "name": "Name",
+  "@name": {
+    "description": "Name"
+  },
+  "no": "No",
+  "@no": {
+    "description": "No"
+  },
   "play": "Play",
   "@play": {
     "description": "Label for play button or tab"
@@ -54,5 +78,13 @@
   "settings": "Settings",
   "@settings": {
     "description": "Settings"
+  },
+  "voiceRecorder": "Voice Recorder",
+  "@voiceRecorder": {
+    "description": "Voice Recorder"
+  },
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes"
   }
 }

@@ -32,6 +32,10 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   Future<void> _insertInitialEntries() async {
+    dev.log(
+      'Inserting initial entries into database ...',
+      name: 'MediaListScreen',
+    );
     // TODO #40 add all appropriate entries
     final List<String> initialEntries = [
       'images/wokubot_hearts.png',
@@ -44,12 +48,17 @@ class _MediaListScreenState extends State<MediaListScreen> {
     ];
     // FIXME getExternalStorageDirectory() will not work on iOS
     // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
-    final String path = await getExternalStorageDirectory().then((directory) => directory.path);
+    final String path =
+        await getExternalStorageDirectory().then((directory) => directory.path);
     for (var element in initialEntries) {
       final String basename = p.basename(element);
       if (!File('$path/$basename').existsSync()) {
         ByteData data = await rootBundle.load('assets/$element');
-        File file = await MediaUtils.writeToFile(data: data, path: '$path/$basename', flush: true);
+        File file = await MediaUtils.writeToFile(
+          data: data,
+          path: '$path/$basename',
+          flush: true,
+        );
         await DatabaseAdapter.instance.insertMedia(
           new MediaEntry(
             id: null,
@@ -104,7 +113,10 @@ class _MediaListScreenState extends State<MediaListScreen> {
     } else if (newEntry != oldEntry) {
       List<MediaEntry> list = _getList(newEntry);
       final int index = list.indexWhere((element) => element.id == newEntry.id);
-      dev.log('Update ${oldEntry.toString()} with ${newEntry.toString()}', name: 'MediaListScreen');
+      dev.log(
+        'Update ${oldEntry.toString()} with ${newEntry.toString()}',
+        name: 'MediaListScreen',
+      );
       setState(() => list[index] = newEntry);
     }
   }
@@ -136,7 +148,8 @@ class _MediaListScreenState extends State<MediaListScreen> {
         break;
       default:
         {
-          throw new ErrorDescription('MediaEntry ${entry.id} has unsupported type');
+          throw new ErrorDescription(
+              'MediaEntry ${entry.id} has unsupported type');
         }
     }
   }
@@ -164,7 +177,10 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _navigateAndUpdateList(MediaEntry entry) async {
-    dev.log('Navigating to MediaDetailsScreen for ${entry.toString()} ...', name: 'MediaListScreen');
+    dev.log(
+      'Navigating to MediaDetailsScreen for ${entry.toString()} ...',
+      name: 'MediaListScreen',
+    );
     final MediaEntry result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -186,6 +202,10 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _onPreviewPressed(BuildContext context, MediaEntry entry) {
+    dev.log(
+      'Displaying preview dialog for ${entry.toString()} ...',
+      name: 'MediaListScreen',
+    );
     // TODO #36 replace with logic for sending media to server
     if (context.read<ConnectionModel>().isConnected) {
       Scaffold.of(context)

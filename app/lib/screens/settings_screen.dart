@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -11,10 +12,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Settings'),
+          title: Text(AppLocalizations.of(context).settings),
         ),
         body: Center(
-          child: Text('Settings coming soon!™'),
+          child: Text(AppLocalizations.of(context).comingSoon),
         ),
       ),
     );

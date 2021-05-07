@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wokubot/app_drawer.dart';
 
 class RecordingScreen extends StatefulWidget {
@@ -12,11 +13,11 @@ class _RecordingScreenState extends State<RecordingScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Voice Recorder'),
+          title: Text(AppLocalizations.of(context).voiceRecorder),
         ),
         drawer: AppDrawer(),
         body: Center(
-          child: Text('Voice recorder coming soon!™'),
+          child: Text(AppLocalizations.of(context).comingSoon),
         ),
       ),
     );
