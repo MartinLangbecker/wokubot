@@ -17,10 +17,21 @@ samples, guidance on mobile development, and a full API reference.
 
 ## TODO Useful commands
 
+To generate files (e. g., JSON serializable), run the following commmand:
+
+flutter packages pub run build_runner build --delete-conflicting-outputs
+
+Other commands:
+
+### Flutter
+
 flutter clean
 flutter install
 flutter build apk
 flutter build bundle
+flutter pub get
+flutter pub upgrade
 
-dart pub get
+### Dart
+
 dart migrate

@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 import 'package:wokubot/media_entry.dart';
 import 'package:wokubot/media_player.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MediaUtils {
   static MediaType getFileType(File file) {
@@ -36,37 +35,34 @@ class MediaUtils {
       case '.webm':
         return MediaType.VIDEO;
       default:
-        throw new ErrorDescription('File type $extension is not supported');
+        throw ErrorDescription('File type $extension is not supported');
     }
   }
 
   static Widget getMedia(MediaEntry entry) {
     switch (entry.type) {
       case MediaType.IMAGE:
-        return Image.file(File(entry.file));
-        break;
+        return Image.file(File(entry.file!));
       case MediaType.AUDIO:
         return MediaPlayer(
-          file: File(entry.file),
+          file: File(entry.file!),
           aspectRatio: 3 / 1,
           placeholderAsset: 'assets/images/audio_placeholder.png',
         );
-        break;
       case MediaType.VIDEO:
         return MediaPlayer(
-          file: File(entry.file),
+          file: File(entry.file!),
           aspectRatio: null,
           placeholderAsset: 'assets/images/video_placeholder.png',
         );
-        break;
       default:
-        throw new ErrorDescription('File type ${entry.type} is not supported');
+        throw ErrorDescription('File type ${entry.type} is not supported');
     }
   }
 
   static Future<File> writeToFile({
-    ByteData data,
-    String path,
+    required ByteData data,
+    required String path,
     bool flush = false,
   }) {
     final ByteBuffer buffer = data.buffer;
@@ -74,49 +70,47 @@ class MediaUtils {
       data.offsetInBytes,
       data.lengthInBytes,
     );
-    return new File(path).writeAsBytes(bytes, flush: flush);
+    return File(path).writeAsBytes(bytes, flush: flush);
   }
 
-  static Future<bool> showYesNoDialog(BuildContext context,
-      {String title, String content}) {
+  static Future<bool?> showYesNoDialog(BuildContext context, {required String title, required String content}) {
     return showDialog(
       context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text(title),
-        content: new Text(content),
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
         actions: <Widget>[
-          new TextButton(
+          TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(AppLocalizations.of(context).yes),
+            child: Text(AppLocalizations.of(context)!.yes),
           ),
-          new TextButton(
+          TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(AppLocalizations.of(context).no),
+            child: Text(AppLocalizations.of(context)!.no),
           ),
         ],
       ),
     );
   }
 
-  static Future<String> showYesNoCancelDialog(BuildContext context,
-      {String title, String content}) {
+  static Future<String?> showYesNoCancelDialog(BuildContext context, {required String title, required String content}) {
     return showDialog(
       context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text(title),
-        content: new Text(content),
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
         actions: <Widget>[
-          new TextButton(
+          TextButton(
             onPressed: () => Navigator.pop(context, 'yes'),
-            child: Text(AppLocalizations.of(context).yes),
+            child: Text(AppLocalizations.of(context)!.yes),
           ),
-          new TextButton(
+          TextButton(
             onPressed: () => Navigator.pop(context, 'no'),
-            child: Text(AppLocalizations.of(context).no),
+            child: Text(AppLocalizations.of(context)!.no),
           ),
-          new TextButton(
+          TextButton(
             onPressed: () => Navigator.pop(context, 'cancel'),
-            child: Text(AppLocalizations.of(context).cancel),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
         ],
       ),
@@ -151,7 +145,7 @@ class MediaUtils {
                       onPrimary: Colors.white,
                     ),
                     child: Text(
-                      AppLocalizations.of(context).close,
+                      AppLocalizations.of(context)!.close,
                       style: TextStyle(fontSize: 20),
                     ),
                     onPressed: () => Navigator.pop(context),

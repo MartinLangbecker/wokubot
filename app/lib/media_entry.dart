@@ -6,11 +6,11 @@ enum MediaType { IMAGE, AUDIO, VIDEO }
 
 @JsonSerializable()
 class MediaEntry {
-  int id;
-  String name;
-  String description;
-  String file;
-  MediaType type;
+  int? id;
+  String? name;
+  String? description;
+  String? file;
+  MediaType? type;
 
   MediaEntry({this.id, this.name, this.description, this.file, this.type});
 
@@ -69,45 +69,17 @@ class MediaEntry {
   }
 
   MediaEntry copyWith({
-    Nullable<int> id,
-    Nullable<String> name,
-    Nullable<String> description,
-    Nullable<String> file,
-    Nullable<MediaType> type,
+    int? id,
+    String? name,
+    String? description,
+    String? file,
+    MediaType? type,
   }) =>
       MediaEntry(
-        id: id == null
-            ? this.id
-            : id.value == null
-                ? null
-                : id.value,
-        name: name == null
-            ? this.name
-            : name.value == null
-                ? null
-                : name.value,
-        description: description == null
-            ? this.description
-            : description.value == null
-                ? null
-                : description.value,
-        file: file == null
-            ? this.file
-            : file.value == null
-                ? null
-                : file.value,
-        type: type == null
-            ? this.type
-            : type.value == null
-                ? null
-                : type.value,
+        id: id ?? this.id,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        file: file ?? this.file,
+        type: type ?? this.type,
       );
-}
-
-class Nullable<T> {
-  T _value;
-  Nullable(this._value);
-  T get value {
-    return _value;
-  }
 }

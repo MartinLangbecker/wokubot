@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoControlsOverlay extends StatelessWidget {
-  const VideoControlsOverlay({Key key, this.controller}) : super(key: key);
+  const VideoControlsOverlay({Key? key, required this.controller}) : super(key: key);
 
   final VideoPlayerController controller;
 

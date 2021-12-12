@@ -13,9 +13,10 @@ class DatabaseAdapter {
   DatabaseAdapter._privateConstructor();
   static final DatabaseAdapter instance = DatabaseAdapter._privateConstructor();
 
-  static Database _database;
-  Future<Database> get database async {
+  static Database? _database;
+  Future<Database?> get database async {
     if (_database != null) return _database;
+    // lazily instantiate the db the first time it is accessed
     _database = await _initDatabase();
     return _database;
   }
@@ -47,7 +48,7 @@ class DatabaseAdapter {
       'Inserting ${entry.toString()} into database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await database;
+    final Database db = await (database as Future<Database>);
 
     return await db.insert(
       _databaseName,
@@ -61,7 +62,7 @@ class DatabaseAdapter {
       'Getting all media from database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await database;
+    final Database db = await (database as Future<Database>);
     final List<Map<String, dynamic>> media = await db.query(_databaseName);
 
     return List<MediaEntry>.generate(media.length, (i) {
@@ -74,7 +75,7 @@ class DatabaseAdapter {
       'Updating ${entry.toString()} in database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await database;
+    final Database db = await (database as Future<Database>);
 
     await db.update(
       _databaseName,
@@ -89,7 +90,7 @@ class DatabaseAdapter {
       'Deleting MediaEntry with id $id from database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await database;
+    final Database db = await (database as Future<Database>);
 
     await db.delete(
       _databaseName,
@@ -103,7 +104,7 @@ class DatabaseAdapter {
       'Deleting all media from database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await database;
+    final Database db = await (database as Future<Database>);
 
     await db.delete(_databaseName);
   }

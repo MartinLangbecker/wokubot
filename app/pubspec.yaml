@@ -18,7 +18,7 @@ dependencies:
   intl: ^0.17.0
   json_annotation: ^4.4.0
   path: ^1.8.0
-  path_provider: ^2.0.1
+  path_provider: ^2.0.8
   provider: ^6.0.1
   sqflite: ^2.0.0+3
   video_player: ^2.1.1

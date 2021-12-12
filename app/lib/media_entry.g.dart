@@ -6,15 +6,13 @@ part of 'media_entry.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MediaEntry _$MediaEntryFromJson(Map<String, dynamic> json) {
-  return MediaEntry(
-    id: json['id'] as int,
-    name: json['name'] as String,
-    description: json['description'] as String,
-    file: json['file'] as String,
-    type: _$enumDecodeNullable(_$MediaTypeEnumMap, json['type']),
-  );
-}
+MediaEntry _$MediaEntryFromJson(Map<String, dynamic> json) => MediaEntry(
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+      description: json['description'] as String?,
+      file: json['file'] as String?,
+      type: $enumDecodeNullable(_$MediaTypeEnumMap, json['type']),
+    );
 
 Map<String, dynamic> _$MediaEntryToJson(MediaEntry instance) =>
     <String, dynamic>{
@@ -24,38 +22,6 @@ Map<String, dynamic> _$MediaEntryToJson(MediaEntry instance) =>
       'file': instance.file,
       'type': _$MediaTypeEnumMap[instance.type],
     };
-
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
-}
 
 const _$MediaTypeEnumMap = {
   MediaType.IMAGE: 'IMAGE',
