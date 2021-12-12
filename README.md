@@ -25,3 +25,7 @@ TODO
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+### Versioning Tags
+
+Versions are defined via [milestones](https://github.com/MartinLangbecker/wokubot/milestones). The final commit for each version will be tagged with the version. For information on git tags, see [Git - Tagging](https://git-scm.com/book/en/v2/Git-Basics-Tagging).
