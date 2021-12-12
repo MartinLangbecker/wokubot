@@ -48,8 +48,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
     ];
     // FIXME getExternalStorageDirectory() will not work on iOS
     // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
-    final String path =
-        await getExternalStorageDirectory().then((directory) => directory.path);
+    final String path = await getExternalStorageDirectory().then((directory) => directory!.path);
     for (var element in initialEntries) {
       final String basename = p.basename(element);
       if (!File('$path/$basename').existsSync()) {
@@ -60,7 +59,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
           flush: true,
         );
         await DatabaseAdapter.instance.insertMedia(
-          new MediaEntry(
+          MediaEntry(
             id: null,
             name: p.basenameWithoutExtension(file.path),
             description: p.basenameWithoutExtension(file.path),
@@ -97,16 +96,12 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _addToList(MediaEntry entry) {
-    if (entry == null) return;
-
     List<MediaEntry> list = _getList(entry);
     dev.log('Add ${entry.toString()}', name: 'MediaListScreen');
     setState(() => list.add(entry));
   }
 
   void _updateList(MediaEntry oldEntry, MediaEntry newEntry) {
-    if (newEntry == null) return;
-
     if (newEntry.type != oldEntry.type) {
       _removeFromList(oldEntry);
       _addToList(newEntry);
@@ -122,8 +117,6 @@ class _MediaListScreenState extends State<MediaListScreen> {
   }
 
   void _removeFromList(MediaEntry entry) {
-    if (entry == null) return;
-
     List<MediaEntry> list = _getList(entry);
     dev.log('Remove ${entry.toString()}', name: 'MediaListScreen');
     setState(() => list.remove(entry));
@@ -132,25 +125,13 @@ class _MediaListScreenState extends State<MediaListScreen> {
   List<MediaEntry> _getList(entry) {
     switch (entry.type) {
       case MediaType.IMAGE:
-        {
-          return _images;
-        }
-        break;
+        return _images;
       case MediaType.AUDIO:
-        {
-          return _audio;
-        }
-        break;
+        return _audio;
       case MediaType.VIDEO:
-        {
-          return _video;
-        }
-        break;
+        return _video;
       default:
-        {
-          throw new ErrorDescription(
-              'MediaEntry ${entry.id} has unsupported type');
-        }
+        throw ErrorDescription('MediaEntry ${entry} has unsupported type');
     }
   }
 
@@ -161,7 +142,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
       title: 'Delete all media?',
       content: 'Do you REALLY want to delete all media from the database?',
     ).then((deleteConfirmed) {
-      if (deleteConfirmed) {
+      if (deleteConfirmed ?? false) {
         DatabaseAdapter.instance.deleteAllMedia();
         _emptyLists();
         ScaffoldMessenger.of(context)
@@ -181,7 +162,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
       'Navigating to MediaDetailsScreen for ${entry.toString()} ...',
       name: 'MediaListScreen',
     );
-    final MediaEntry result = await Navigator.push(
+    final MediaEntry? result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => MediaDetailsScreen(entry),
@@ -228,12 +209,12 @@ class _MediaListScreenState extends State<MediaListScreen> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).mediaList),
+            title: Text(AppLocalizations.of(context)!.mediaList),
             actions: [
               Builder(builder: (BuildContext context) {
                 return IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () => _navigateAndUpdateList(new MediaEntry()),
+                  onPressed: () => _navigateAndUpdateList(MediaEntry()),
                   tooltip: 'Add media entry',
                 );
               }),

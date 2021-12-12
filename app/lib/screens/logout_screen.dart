@@ -21,7 +21,7 @@ class LogoutScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).logoutScreenAppBar),
+          title: Text(AppLocalizations.of(context)!.logoutScreenAppBar),
         ),
         body: Center(
           child: Form(
@@ -44,8 +44,7 @@ class LogoutScreen extends StatelessWidget {
                   child: RichText(
                     textAlign: TextAlign.justify,
                     text: TextSpan(
-                      text:
-                          AppLocalizations.of(context).logoutScreenDescription,
+                      text: AppLocalizations.of(context)!.logoutScreenDescription,
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                     ),
                   ),
@@ -56,7 +55,7 @@ class LogoutScreen extends StatelessWidget {
                     height: 56,
                     child: ElevatedButton(
                       child: Text(
-                        AppLocalizations.of(context).disconnect,
+                        AppLocalizations.of(context)!.disconnect,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,

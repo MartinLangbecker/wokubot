@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:wokubot/database_adapter.dart';
 import 'package:wokubot/media_entry.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wokubot/utils/media_utils.dart';
 
 class MediaDetailsScreen extends StatefulWidget {
@@ -21,29 +21,27 @@ class MediaDetailsScreen extends StatefulWidget {
 
 class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController;
-  TextEditingController _descriptionController;
-  Widget _mediaWidget;
-  MediaEntry _entry;
-  MediaEntry _savedEntry;
-  bool _newEntry;
-  bool _hasChanged;
-  bool _isLocked;
+  late TextEditingController _nameController;
+  late TextEditingController _descriptionController;
+  late Widget _mediaWidget;
+  late MediaEntry _entry;
+  late MediaEntry _savedEntry;
+  late bool _isNewEntry;
+  late bool _hasChanged;
+  late bool _isLocked;
 
   _MediaDetailsScreenState(MediaEntry entry) {
     _nameController = TextEditingController(text: entry.name);
     _descriptionController = TextEditingController(text: entry.description);
-    _mediaWidget = (entry.file == null)
-        ? Icon(Icons.add, size: 64)
-        : MediaUtils.getMedia(entry);
+    _mediaWidget = (entry.file == null) ? Icon(Icons.add, size: 64) : MediaUtils.getMedia(entry);
     this._entry = entry.copyWith();
     this._savedEntry = entry.copyWith();
-    _newEntry = entry.id == null;
+    _isNewEntry = entry.id == null;
     _hasChanged = false;
-    _isLocked = !_newEntry;
+    _isLocked = !_isNewEntry;
   }
 
-  Future<bool> _onBackPressed(BuildContext context) {
+  Future<bool?> _onBackPressed(BuildContext context) {
     // TODO #39 if changes were made, ask if user wants to save (Yes/No/Discard)
     return (!_isLocked && _hasChanged)
         ? MediaUtils.showYesNoDialog(
@@ -59,7 +57,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     if (_isLocked) _saveEntry(context);
   }
 
-  Future<bool> _onDeletePressed(BuildContext context) {
+  Future<bool?> _onDeletePressed(BuildContext context) {
     return MediaUtils.showYesNoDialog(
       context,
       title: 'Delete entry?',
@@ -68,24 +66,22 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   }
 
   void _saveEntry(BuildContext context) async {
-    if (!_formKey.currentState.validate()) {
-      return;
-    }
-    _formKey.currentState.save();
+    if (!_formKey.currentState!.validate()) return;
+
+    _formKey.currentState!.save();
 
     if (_entry.file == null) _entry.file = 'assets/images/placeholder.png';
 
     // FIXME getExternalStorageDirectory() will not work on iOS
     // (see https://pub.dev/documentation/path_provider/latest/path_provider/getExternalStorageDirectory.html)
-    final String path =
-        await getExternalStorageDirectory().then((directory) => directory.path);
-    final String basename = p.basename(_entry.file);
+    final String path = await getExternalStorageDirectory().then((directory) => directory!.path);
+    final String basename = p.basename(_entry.file!);
     File file;
 
     if (!File('$path/$basename').existsSync()) {
       bool fromAsset = (basename == 'placeholder.png');
       file = await _copyFile(
-        filePath: _entry.file,
+        filePath: _entry.file!,
         newPath: '$path/$basename',
         fromAsset: fromAsset,
       );
@@ -103,12 +99,12 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
       _hasChanged = false;
     });
 
-    if (_newEntry) {
+    if (_isNewEntry) {
       DatabaseAdapter.instance.insertMedia(_entry).then((id) {
         setState(() {
           _entry.id = id;
           _savedEntry.id = id;
-          _newEntry = false;
+          _isNewEntry = false;
         });
       });
       ScaffoldMessenger.of(context)
@@ -128,10 +124,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
     }
   }
 
-  Future<File> _copyFile(
-      {@required String filePath,
-      @required String newPath,
-      fromAsset = false}) async {
+  Future<File> _copyFile({required String filePath, required String newPath, fromAsset = false}) async {
     Future<File> file;
     if (fromAsset) {
       ByteData data = await rootBundle.load(filePath);
@@ -145,14 +138,14 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
 
   void _deleteEntry(BuildContext context) {
     _onDeletePressed(context).then((deletionConfirmed) {
-      if (deletionConfirmed) {
-        DatabaseAdapter.instance.deleteMedia(_entry.id);
+      if (deletionConfirmed ?? false) {
+        DatabaseAdapter.instance.deleteMedia(_entry.id!);
         setState(() {
           _nameController.clear();
           _descriptionController.clear();
-          _entry = new MediaEntry();
-          _savedEntry = new MediaEntry();
-          _newEntry = true;
+          _entry = MediaEntry();
+          _savedEntry = MediaEntry();
+          _isNewEntry = true;
           _hasChanged = false;
           _isLocked = false;
         });
@@ -169,13 +162,12 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   }
 
   void _pickFile() async {
-    FilePickerResult result =
-        await FilePicker.platform.pickFiles(allowCompression: true);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowCompression: true);
 
     if (result != null) {
       setState(() {
         _entry.file = result.files.first.path;
-        _entry.type = MediaUtils.getFileType(File(result.files.first.path));
+        _entry.type = MediaUtils.getFileType(File(_entry.file!));
         _mediaWidget = MediaUtils.getMedia(_entry);
         _hasChanged = true;
       });
@@ -200,15 +192,13 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => _onBackPressed(context).then((willPop) {
-        if (willPop) {
-          Navigator.pop(context, _savedEntry);
-        }
+        if (willPop ?? false) Navigator.pop(context, _savedEntry);
         return Future<bool>.value(false);
       }),
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).detailView),
+            title: Text(AppLocalizations.of(context)!.detailView),
             actions: [
               Builder(builder: (BuildContext context) {
                 return IconButton(
@@ -220,7 +210,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
               Builder(builder: (BuildContext context) {
                 return IconButton(
                   icon: Icon(Icons.delete),
-                  onPressed: _newEntry ? null : () => _deleteEntry(context),
+                  onPressed: _isNewEntry ? null : () => _deleteEntry(context),
                   tooltip: 'Delete media entry',
                 );
               }),
@@ -251,7 +241,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                                       Alignment.bottomCenter,
                                       Alignment.bottomRight,
                                       0.9,
-                                    ),
+                                    )!,
                                     child: Icon(
                                       Icons.edit,
                                       color: Colors.white,
@@ -270,7 +260,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                   child: TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).name,
+                      hintText: AppLocalizations.of(context)!.name,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),
@@ -280,8 +270,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                     style: TextStyle(color: Colors.black87, fontSize: 20),
                     enabled: !_isLocked,
                     onSaved: (name) => setState(() => _entry.name = name),
-                    onChanged: (text) =>
-                        setState(() => _hasChanged = (text != _entry.name)),
+                    onChanged: (text) => setState(() => _hasChanged = (text != _entry.name)),
                   ),
                 ),
                 Padding(
@@ -289,7 +278,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                   child: TextFormField(
                     controller: _descriptionController,
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).description,
+                      hintText: AppLocalizations.of(context)!.description,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),
@@ -298,10 +287,8 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black87, fontSize: 20),
                     enabled: !_isLocked,
-                    onSaved: (description) =>
-                        setState(() => _entry.description = description),
-                    onChanged: (text) =>
-                        setState(() => _hasChanged = (text != _entry.name)),
+                    onSaved: (description) => setState(() => _entry.description = description),
+                    onChanged: (text) => setState(() => _hasChanged = (text != _entry.name)),
                     minLines: 1,
                     maxLines: 5,
                   ),

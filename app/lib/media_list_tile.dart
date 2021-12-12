@@ -6,27 +6,25 @@ import 'package:wokubot/media_entry.dart';
 class MediaListTile extends StatelessWidget {
   final Function navigateAndUpdateList;
   final Function onPreviewPressed;
-  final BuildContext context;
+  final BuildContext? context;
   final MediaEntry entry;
 
-  Widget _getLeading() {
-    Widget widget;
+  Widget? _getLeading() {
     switch (entry.type) {
       case MediaType.IMAGE:
-        widget = (entry.file != null) ? Image.file(File(entry.file)) : Image.asset('assets/images/placeholder.png');
-        break;
+        return (entry.file != null) ? Image.file(File(entry.file!)) : Image.asset('assets/images/placeholder.png');
       case MediaType.AUDIO:
-        widget = Icon(Icons.audiotrack, size: 40);
-        break;
+        return Icon(Icons.audiotrack, size: 40);
       case MediaType.VIDEO:
-        widget = Icon(Icons.local_movies, size: 40);
-        break;
+        return Icon(Icons.local_movies, size: 40);
+      case null:
+        return null;
     }
-
-    return widget;
   }
 
-  MediaListTile({this.navigateAndUpdateList, this.entry, this.onPreviewPressed, this.context});
+  // FIXME: possible to remove variable 'context'?
+  MediaListTile(
+      {required this.navigateAndUpdateList, required this.entry, required this.onPreviewPressed, this.context});
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -34,9 +32,9 @@ class MediaListTile extends StatelessWidget {
         height: 120,
         child: _getLeading(),
       ),
-      title: Text(entry.name),
+      title: Text(entry.name ?? ''),
       subtitle: Text(
-        entry.description,
+        entry.description ?? '',
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),

@@ -41,7 +41,7 @@ class MediaEntry {
 
   Map<String, dynamic> toJson() => _$MediaEntryToJson(this);
 
-  factory MediaEntry.fromMap(Map<String, dynamic> data) => new MediaEntry(
+  factory MediaEntry.fromMap(Map<String, dynamic> data) => MediaEntry(
         id: data['id'],
         name: data['name'],
         description: data['description'],

@@ -7,7 +7,7 @@ import 'package:wokubot/models/connection_model.dart';
 class LoginScreen extends StatefulWidget {
   final BuildContext context;
 
-  const LoginScreen({Key key, this.context}) : super(key: key);
+  const LoginScreen({Key? key, required this.context}) : super(key: key);
   @override
   _LoginScreenState createState() => _LoginScreenState(context);
 }
@@ -17,22 +17,18 @@ class _LoginScreenState extends State<LoginScreen> {
   final _addressController = TextEditingController(text: '192.168.0.1');
   final String _addressPattern =
       r'\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\b';
-  MultiValidator _addressValidator;
+  late MultiValidator _addressValidator;
   String address = '';
 
   _LoginScreenState(BuildContext context) {
     _addressValidator = MultiValidator([
-      PatternValidator(_addressPattern,
-          errorText:
-              AppLocalizations.of(context).loginScreenAddressValidatorError),
-      RequiredValidator(
-          errorText:
-              AppLocalizations.of(context).loginScreenAddressValidatorError),
+      PatternValidator(_addressPattern, errorText: AppLocalizations.of(context)!.loginScreenAddressValidatorError),
+      RequiredValidator(errorText: AppLocalizations.of(context)!.loginScreenAddressValidatorError),
     ]);
   }
 
   void _handleConnect(BuildContext context) {
-    if (!_formKey.currentState.validate()) {
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
@@ -46,8 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content:
-              Text(AppLocalizations.of(context).loginScreenConnectionError),
+          content: Text(AppLocalizations.of(context)!.loginScreenConnectionError),
           duration: Duration(seconds: 2),
         ));
     }
@@ -69,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).loginScreenAppBar),
+          title: Text(AppLocalizations.of(context)!.loginScreenAppBar),
         ),
         body: Center(
           child: Form(
@@ -93,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: RichText(
                     textAlign: TextAlign.justify,
                     text: TextSpan(
-                      text: AppLocalizations.of(context).loginScreenDescription,
+                      text: AppLocalizations.of(context)!.loginScreenDescription,
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                     ),
                   ),
@@ -104,15 +99,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     return TextFormField(
                       controller: _addressController,
                       decoration: InputDecoration(
-                        hintText:
-                            AppLocalizations.of(context).loginScreenAddressHint,
+                        hintText: AppLocalizations.of(context)!.loginScreenAddressHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),
                       ),
                       keyboardType: TextInputType.number,
                       onFieldSubmitted: (_) => _handleConnect(context),
-                      onSaved: (text) => address = text,
+                      onSaved: (text) => address = text ?? '',
                       textAlign: TextAlign.center,
                       validator: _addressValidator,
                     );
@@ -125,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Builder(builder: (BuildContext context) {
                       return ElevatedButton(
                         child: Text(
-                          AppLocalizations.of(context).connect,
+                          AppLocalizations.of(context)!.connect,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,

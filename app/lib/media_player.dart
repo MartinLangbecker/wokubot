@@ -7,17 +7,15 @@ import 'package:wokubot/utils/video_controls_overlay.dart';
 class MediaPlayer extends StatefulWidget {
   final File file;
   final String placeholderAsset;
-  final double aspectRatio;
+  final double? aspectRatio;
 
-  const MediaPlayer(
-      {Key key, this.file, this.placeholderAsset, this.aspectRatio})
-      : super(key: key);
+  const MediaPlayer({Key? key, required this.file, required this.placeholderAsset, this.aspectRatio}) : super(key: key);
   @override
   _MediaPlayerState createState() => _MediaPlayerState();
 }
 
 class _MediaPlayerState extends State<MediaPlayer> {
-  VideoPlayerController controller;
+  late VideoPlayerController controller;
 
   void _initVideoPlayer() {
     controller = VideoPlayerController.file(widget.file)
@@ -34,7 +32,7 @@ class _MediaPlayerState extends State<MediaPlayer> {
   @override
   void dispose() {
     super.dispose();
-    controller?.dispose();
+    controller.dispose();
   }
 
   @override
