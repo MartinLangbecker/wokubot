@@ -28,10 +28,15 @@ Other commands:
 flutter clean
 flutter install
 flutter build apk
-flutter build bundle
+For releases: flutter build apk --split-per-abi
+For Play Store: flutter build appbundle
 flutter pub get
 flutter pub upgrade
 
 ### Dart
 
 dart migrate
+
+## App Release
+
+See [Build and release an Android app](https://docs.flutter.dev/deployment/android) in the official documentation.
