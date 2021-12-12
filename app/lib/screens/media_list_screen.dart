@@ -131,7 +131,7 @@ class _MediaListScreenState extends State<MediaListScreen> {
       case MediaType.VIDEO:
         return _video;
       default:
-        throw ErrorDescription('MediaEntry ${entry} has unsupported type');
+        throw ErrorDescription('MediaEntry $entry has unsupported type');
     }
   }
 
