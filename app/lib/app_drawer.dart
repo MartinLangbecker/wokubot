@@ -22,7 +22,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   // TODO #38 unify login and logout screens
                   ? ListTile(
                       leading: Icon(Icons.login),
-                      title: Text(AppLocalizations.of(context).connect),
+                      title: Text(AppLocalizations.of(context)!.connect),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -35,7 +35,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     )
                   : ListTile(
                       leading: Icon(Icons.logout),
-                      title: Text(AppLocalizations.of(context).disconnect),
+                      title: Text(AppLocalizations.of(context)!.disconnect),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -54,7 +54,7 @@ class _AppDrawerState extends State<AppDrawer> {
               alignment: Alignment.bottomLeft,
               child: ListTile(
                 leading: Icon(Icons.settings),
-                title: Text(AppLocalizations.of(context).settings),
+                title: Text(AppLocalizations.of(context)!.settings),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(

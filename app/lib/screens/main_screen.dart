@@ -27,14 +27,14 @@ class _MainScreenState extends State<MainScreen> {
                 Icons.play_arrow,
                 color: Colors.green,
               ),
-              label: AppLocalizations.of(context).play,
+              label: AppLocalizations.of(context)!.play,
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.circle,
                 color: Colors.red,
               ),
-              label: AppLocalizations.of(context).record,
+              label: AppLocalizations.of(context)!.record,
             ),
           ],
           onTap: (index) {

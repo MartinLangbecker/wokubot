@@ -12,10 +12,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).settings),
+          title: Text(AppLocalizations.of(context)!.settings),
         ),
         body: Center(
-          child: Text(AppLocalizations.of(context).comingSoon),
+          child: Text(AppLocalizations.of(context)!.comingSoon),
         ),
       ),
     );

@@ -13,11 +13,11 @@ class _RecordingScreenState extends State<RecordingScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).voiceRecorder),
+          title: Text(AppLocalizations.of(context)!.voiceRecorder),
         ),
         drawer: AppDrawer(),
         body: Center(
-          child: Text(AppLocalizations.of(context).comingSoon),
+          child: Text(AppLocalizations.of(context)!.comingSoon),
         ),
       ),
     );
