@@ -22,8 +22,9 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter build apk --debug
-      - run: flutter analyze
-      - uses: actions/upload-artifact@v2.3.1
+      - name: Upload debug app artifact
+        uses: actions/upload-artifact@v2.3.1
         with:
           name: debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
+      - run: flutter analyze
