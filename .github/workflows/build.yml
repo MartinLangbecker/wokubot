@@ -26,10 +26,7 @@ jobs:
         run: flutter analyze
       - name: Build Android debug apk ...
         id: build-apk
-        uses: NiklasLehnfeld/flutter-android-build-action@v1
-        with:
-          release: false
-          build-type: apk
+        run: flutter build apk --debug
       - run: echo ${{ steps.build-apk.outputs }}
       - run: echo ${{ steps.build-apk.outputs.apk-path }}
       - name: Upload generated apk as artifact ...
