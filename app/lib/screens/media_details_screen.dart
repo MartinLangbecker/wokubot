@@ -149,6 +149,7 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
           _hasChanged = false;
           _isLocked = false;
         });
+        Navigator.pop(context);
         ScaffoldMessenger.of(context)
           ..removeCurrentSnackBar()
           ..showSnackBar(

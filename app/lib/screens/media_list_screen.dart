@@ -170,7 +170,10 @@ class _MediaListScreenState extends State<MediaListScreen> {
       ),
     );
 
-    if (result == null) return;
+    if (result == null) {
+      _loadMediaLists();
+      return;
+    }
     if (entry.id == null && result.id != null) {
       _addToList(result);
     } else if (entry.id != null && result.id != null) {
