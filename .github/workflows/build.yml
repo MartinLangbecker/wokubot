@@ -24,13 +24,14 @@ jobs:
         run: flutter pub get
       - name: Statically analyze Dart code ...
         run: flutter analyze
+      - name: Create env path
+        run: echo "artifactPath=build/app/outputs/apk/debug/app-debug.apk" >> $GITHUB_ENV
       - name: Build Android debug apk ...
         id: build-apk
         run: flutter build apk --debug
-      - run: echo ${{ steps.build-apk.outputs }}
-      - run: echo ${{ steps.build-apk.outputs.apk-path }}
+      - run: echo ${{ env.artifactPath }}
       - name: Upload generated apk as artifact ...
         uses: actions/upload-artifact@v2.3.1
         with:
           name: debug-apk
-          path: ${{ steps.build-apk.outputs.apk-path }}
+          path: ${{ env.artifactPath }}
