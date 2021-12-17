@@ -46,7 +46,7 @@ class MediaUtils {
       case MediaType.AUDIO:
         return MediaPlayer(
           file: File(entry.file!),
-          aspectRatio: 3 / 1,
+          aspectRatio: 2 / 1,
           placeholderAsset: 'assets/images/audio_placeholder.png',
         );
       case MediaType.VIDEO:

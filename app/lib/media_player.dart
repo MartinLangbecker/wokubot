@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:wokubot/utils/video_controls_overlay.dart';
 
 class MediaPlayer extends StatefulWidget {
   final File file;
@@ -15,38 +15,49 @@ class MediaPlayer extends StatefulWidget {
 }
 
 class _MediaPlayerState extends State<MediaPlayer> {
-  late VideoPlayerController controller;
+  late VideoPlayerController _videoController;
+  ChewieController? _chewieController;
 
-  void _initVideoPlayer() {
-    controller = VideoPlayerController.file(widget.file)
-      ..addListener(() => setState(() {}))
-      ..initialize().then((_) => setState(() {}));
+  Future<void> initializePlayer() async {
+    _videoController = VideoPlayerController.file(widget.file);
+    await _videoController.initialize();
+    _createChewieController();
+    setState(() {});
+  }
+
+  void _createChewieController() {
+    _chewieController = ChewieController(
+      videoPlayerController: _videoController,
+      autoInitialize: true,
+      aspectRatio: widget.aspectRatio,
+      allowFullScreen: false,
+      allowPlaybackSpeedChanging: false,
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    _initVideoPlayer();
+    initializePlayer();
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    _videoController.dispose();
+    _chewieController?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return (controller.value.isInitialized)
+    return (_chewieController != null && _chewieController!.videoPlayerController.value.isInitialized)
+        // ? Chewie(controller: _chewieController!)
         ? AspectRatio(
-            aspectRatio: widget.aspectRatio ?? controller.value.aspectRatio,
+            aspectRatio: widget.aspectRatio ?? _chewieController!.videoPlayerController.value.aspectRatio,
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                Container(color: Colors.black87),
-                VideoPlayer(controller),
-                VideoControlsOverlay(controller: controller),
-                VideoProgressIndicator(controller, allowScrubbing: true),
+                Chewie(controller: _chewieController!),
               ],
             ),
           )
