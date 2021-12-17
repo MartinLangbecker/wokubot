@@ -24,25 +24,16 @@ jobs:
         run: flutter pub get
       - name: Statically analyze Dart code ...
         run: flutter analyze
-      - name: Build debug apk ...
-        run: flutter build apk --debug
+      - name: Build Android debug apk ...
+        id: build-apk
+        uses: NiklasLehnfeld/flutter-android-build-action@v1
+        with:
+          release: false
+          build-type: apk
+      - run: echo ${{ steps.build-apk.outputs }}
+      - run: echo ${{ steps.build-apk.outputs.apk-path }}
       - name: Upload generated apk as artifact ...
         uses: actions/upload-artifact@v2.3.1
         with:
-          name: debug-apk-1
-          path: build/app/outputs/apk/debug/app-debug.apk
-      - name: Upload generated apk as artifact ...
-        uses: actions/upload-artifact@v2.3.1
-        with:
-          name: debug-apk-2
-          path: build/app/outputs/flutter-apk/app-debug.apk
-      - name: Upload generated apk as artifact ...
-        uses: actions/upload-artifact@v2.3.1
-        with:
-          name: debug-apk-3
-          path: ./build/app/outputs/apk/debug/app-debug.apk
-      - name: Upload generated apk as artifact ...
-        uses: actions/upload-artifact@v2.3.1
-        with:
-          name: debug-apk-4
-          path: ./build/app/outputs/flutter-apk/app-debug.apk
+          name: debug-apk
+          path: ${{ steps.build-apk.outputs.apk-path }}
