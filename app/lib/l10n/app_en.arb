@@ -19,6 +19,14 @@
   "@description": {
     "description": "Description"
   },
+  "detailsScreenDeleteEntryTooltip": "Delete media entry",
+  "@detailsScreenEditEntry": {
+    "description": "Tooltip for delete media entry icon button"
+  },
+  "detailsScreenEditEntryTooltip": "Edit media entry",
+  "@detailsScreenEditEntry": {
+    "description": "Tooltip for edit media entry icon button"
+  },
   "detailView": "Detail View",
   "@detailView": {
     "description": "Label for detail view"

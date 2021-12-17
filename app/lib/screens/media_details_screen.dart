@@ -204,14 +204,14 @@ class _MediaDetailsScreenState extends State<MediaDetailsScreen> {
                 return IconButton(
                   icon: (_isLocked) ? Icon(Icons.edit) : Icon(Icons.save_alt),
                   onPressed: () => _onLockPressed(context),
-                  tooltip: 'Edit media entry',
+                  tooltip: AppLocalizations.of(context)!.detailsScreenEditEntryTooltip,
                 );
               }),
               Builder(builder: (BuildContext context) {
                 return IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: _isNewEntry ? null : () => _deleteEntry(context),
-                  tooltip: 'Delete media entry',
+                  tooltip: AppLocalizations.of(context)!.detailsScreenDeleteEntryTooltip,
                 );
               }),
             ],

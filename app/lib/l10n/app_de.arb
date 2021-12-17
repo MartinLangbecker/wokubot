@@ -4,6 +4,8 @@
   "comingSoon": "Bald™ verfügbar!",
   "connect": "Verbinden",
   "description": "Beschreibung",
+  "detailsScreenDeleteEntryTooltip": "Medieneintrag löschen",
+  "detailsScreenEditEntryTooltip": "Medieneintrag bearbeiten",
   "detailView": "Detailansicht",
   "disconnect": "Verbindung trennen",
   "loginScreenAddressHint": "Server IP (z.B. 192.168.0.1)",
