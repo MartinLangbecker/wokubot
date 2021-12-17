@@ -59,15 +59,6 @@ class MediaEntry {
     };
   }
 
-  Map<String, dynamic> toMapWithoutId() {
-    return {
-      'name': name,
-      'description': description,
-      'file': file,
-      'type': type.toString(),
-    };
-  }
-
   MediaEntry copyWith({
     int? id,
     String? name,

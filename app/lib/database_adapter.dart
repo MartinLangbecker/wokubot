@@ -48,11 +48,11 @@ class DatabaseAdapter {
       'Inserting ${entry.toString()} into database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await (database as Future<Database>);
+    final Database? db = await database;
 
-    return await db.insert(
+    return await db!.insert(
       _databaseName,
-      entry.toMapWithoutId(),
+      entry.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -62,8 +62,8 @@ class DatabaseAdapter {
       'Getting all media from database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await (database as Future<Database>);
-    final List<Map<String, dynamic>> media = await db.query(_databaseName);
+    final Database? db = await database;
+    final List<Map<String, dynamic>> media = await db!.query(_databaseName);
 
     return List<MediaEntry>.generate(media.length, (i) {
       return MediaEntry.fromMap(media[i]);
@@ -75,9 +75,9 @@ class DatabaseAdapter {
       'Updating ${entry.toString()} in database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await (database as Future<Database>);
+    final Database? db = await database;
 
-    await db.update(
+    await db!.update(
       _databaseName,
       entry.toMap(),
       where: "id = ?",
@@ -90,9 +90,9 @@ class DatabaseAdapter {
       'Deleting MediaEntry with id $id from database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await (database as Future<Database>);
+    final Database? db = await database;
 
-    await db.delete(
+    await db!.delete(
       _databaseName,
       where: "id = ?",
       whereArgs: [id],
@@ -104,8 +104,8 @@ class DatabaseAdapter {
       'Deleting all media from database $_databaseName ...',
       name: 'DatabaseAdapter',
     );
-    final Database db = await (database as Future<Database>);
+    final Database? db = await database;
 
-    await db.delete(_databaseName);
+    await db!.delete(_databaseName);
   }
 }
