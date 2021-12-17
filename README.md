@@ -1,3 +1,5 @@
+[![CI](https://github.com/MartinLangbecker/wokubot/actions/workflows/build.yml/badge.svg)](https://github.com/MartinLangbecker/wokubot/actions/workflows/build.yml)
+
 # Wokubot
 
 This repository will contain code to mimic the original Wokubot from Wohnzimmerkultur Ilmenau (see https://www.facebook.com/Wokubot/).
